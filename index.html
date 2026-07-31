@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osamodas Solver</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🧩 Osamodas Solver</h1>
+
+    <p class="descripcion">
+        Introduce el intento realizado y el resultado obtenido para encontrar la combinación correcta.
+    </p>
+
+    <div class="intento">
+
+        <select id="slot1">
+            <option>Agua</option>
+            <option>Aire</option>
+            <option>Tierra</option>
+            <option>Fuego</option>
+        </select>
+
+        <select id="slot2">
+            <option>Agua</option>
+            <option>Aire</option>
+            <option>Tierra</option>
+            <option>Fuego</option>
+        </select>
+
+        <select id="slot3">
+            <option>Agua</option>
+            <option>Aire</option>
+            <option>Tierra</option>
+            <option>Fuego</option>
+        </select>
+
+        <select id="slot4">
+            <option>Agua</option>
+            <option>Aire</option>
+            <option>Tierra</option>
+            <option>Fuego</option>
+        </select>
+
+    </div>
+
+    <div class="resultado">
+
+        <label>
+            ⚪ Blancos
+            <input id="white" type="number" min="0" max="4" value="0">
+        </label>
+
+        <label>
+            ⚫ Negros
+            <input id="black" type="number" min="0" max="4" value="0">
+        </label>
+
+    </div>
+
+    <button id="addAttempt">
+        Agregar intento
+    </button>
+
+    <button id="reset">
+        Reiniciar
+    </button>
+
+    <hr>
+
+    <h2>Historial</h2>
+
+    <table id="history">
+
+        <thead>
+
+        <tr>
+            <th>#</th>
+            <th>Intento</th>
+            <th>⚪</th>
+            <th>⚫</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        </tbody>
+
+    </table>
+
+    <hr>
+
+    <h2>Posibilidades restantes</h2>
+
+    <p id="remaining">
+        256
+    </p>
+
+    <div id="solutions">
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
