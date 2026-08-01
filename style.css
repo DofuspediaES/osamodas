@@ -1,19 +1,28 @@
-:root { --bg: #121212; --accent: #ffcc00; }
-body { background: var(--bg); color: #eee; font-family: sans-serif; display: flex; justify-content: center; padding: 10px; }
-.container { background: #1e1e1e; padding: 20px; border-radius: 15px; max-width: 400px; width: 100%; text-align: center; }
-h1 { color: var(--accent); margin-bottom: 5px; }
-.instruction { font-size: 0.85rem; color: #bbb; margin-bottom: 15px; }
+:root {
+    --bg: #121212;
+    --card: #1e1e1e;
+    --accent: #ffcc00;
+}
 
-.grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+body { background: var(--bg); color: #eee; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 10px; margin: 0; }
+.container { background: var(--card); padding: 20px; border-radius: 15px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+h1 { color: var(--accent); margin-bottom: 10px; font-size: 1.6rem; }
+.instruction { font-size: 0.85rem; color: #bbb; margin-bottom: 15px; line-height: 1.4; }
+
+.grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .card { background: #2a2a2a; padding: 10px; border-radius: 8px; border: 1px solid #333; }
-input { background: #000; border: 1px solid #444; color: #fff; padding: 8px; font-size: 1.2rem; text-align: center; width: 60px; }
+input { background: #000; border: 1px solid #444; color: #fff; padding: 10px; font-size: 1.3rem; text-align: center; width: 60px; border-radius: 5px; }
 
-button { background: var(--accent); border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; }
+button { background: var(--accent); border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; transition: 0.2s; }
+button:active { transform: scale(0.98); }
+
+.error { color: #ff5555; font-size: 0.8rem; margin-bottom: 10px; min-height: 1rem; }
+.hidden { display: none; }
 
 #solver-grid { display: flex; justify-content: space-between; gap: 5px; margin: 25px 0; }
-.slot { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.slot { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 15px; }
 
-.pill { padding: 8px 0; border-radius: 4px; font-size: 0.65rem; font-weight: bold; width: 100%; color: white; text-transform: uppercase; }
+.pill { padding: 8px 0; border-radius: 4px; font-size: 0.65rem; font-weight: bold; width: 100%; color: white; text-transform: uppercase; background: #333; }
 .pill-tierra { background: #795548; }
 .pill-fuego { background: #d32f2f; }
 .pill-agua { background: #1976d2; }
@@ -21,16 +30,21 @@ button { background: var(--accent); border: none; padding: 15px; border-radius: 
 
 /* Círculos con alto contraste */
 .circle-btn {
-    width: 45px; height: 45px; border-radius: 50%; border: 3px solid #444;
-    cursor: pointer; background: #111; transition: 0.2s;
-}
-.circle-btn[data-state="white"] { 
-    background: white; border: 3px solid #000; box-shadow: 0 0 5px white; 
-}
-.circle-btn[data-state="black"] { 
-    background: black; border: 3px solid #fff; box-shadow: 0 0 5px rgba(255,255,255,0.5); 
+    width: 45px; height: 45px; border-radius: 50%; border: 3px solid #555;
+    cursor: pointer; background: #111; transition: 0.2s; box-sizing: border-box;
 }
 
-.footer { margin-top: 30px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #444; padding-top: 15px; }
-.btn-reset { width: auto; background: #444; color: white; padding: 6px 12px; font-size: 0.7rem; }
-.hidden { display: none; }
+/* Estado Blanco: Fondo blanco con borde negro fuerte */
+.circle-btn[data-state="white"] {
+    background: white;
+    border: 4px solid #000;
+}
+
+/* Estado Negro: Fondo negro con borde blanco fuerte */
+.circle-btn[data-state="black"] {
+    background: black;
+    border: 4px solid #fff;
+}
+
+.footer { margin-top: 30px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #333; padding-top: 15px; }
+.btn-reset { width: auto; background: #444; color: white; padding: 8px 15px; font-size: 0.7rem; }
