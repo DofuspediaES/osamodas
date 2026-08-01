@@ -3,52 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osamodas Mastermind Pro</title>
+    <title>Osamodas Mastermind Posicional</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Osa Solver Pro</h1>
+        <h1>Osa Solver Posicional</h1>
 
         <!-- PARTE 1 -->
         <section id="part1">
-            <p class="instruction">1. Lanza 4 veces cada hechizo. <br>Anota cuántos círculos blancos totales salen por cada uno:</p>
+            <p class="instruction">1. Lanza 4 veces cada hechizo. Indica cuántos círculos totales (de cualquier color) salieron:</p>
             <div class="grid-inputs">
                 <div class="card t"><label>🪨 Tierra</label><input type="number" id="in-tierra" value="0" min="0" max="4"></div>
                 <div class="card f"><label>🔥 Fuego</label><input type="number" id="in-fuego" value="0" min="0" max="4"></div>
                 <div class="card w"><label>💧 Agua</label><input type="number" id="in-agua" value="0" min="0" max="4"></div>
                 <div class="card a"><label>💨 Aire</label><input type="number" id="in-aire" value="0" min="0" max="4"></div>
             </div>
-            <button id="btn-start">GENERAR POSIBILIDADES</button>
+            <button id="btn-start">EMPEZAR SOLUCIONADOR</button>
         </section>
 
         <!-- PARTE 2 -->
         <section id="part2" class="hidden">
-            <p class="instruction">Prueba este orden en el juego y marca <b>exactamente</b> lo que sale en cada posición:</p>
+            <p class="instruction">2. Lanza este orden y <b>haz clic en los círculos</b> para calcar lo que ves en el juego:</p>
             
-            <div id="solver-ui">
+            <div id="solver-grid">
                 <div class="slot" id="slot-0">
-                    <div class="pill">-</div>
+                    <div class="pill">...</div>
                     <div class="circle-btn" data-state="none"></div>
                 </div>
                 <div class="slot" id="slot-1">
-                    <div class="pill">-</div>
+                    <div class="pill">...</div>
                     <div class="circle-btn" data-state="none"></div>
                 </div>
                 <div class="slot" id="slot-2">
-                    <div class="pill">-</div>
+                    <div class="pill">...</div>
                     <div class="circle-btn" data-state="none"></div>
                 </div>
                 <div class="slot" id="slot-3">
-                    <div class="pill">-</div>
+                    <div class="pill">...</div>
                     <div class="circle-btn" data-state="none"></div>
                 </div>
             </div>
 
-            <button id="btn-filter">FILTRAR POR POSICIÓN</button>
+            <button id="btn-filter">FILTRAR POR ESTE RESULTADO</button>
+
+            <div id="success-msg" class="hidden">
+                <h2 style="color: #00ff00;">¡ESTA ES LA SOLUCIÓN!</h2>
+            </div>
 
             <div class="footer">
-                <span>Restantes: <strong id="count-text">0</strong></span>
+                <span>Posibilidades: <strong id="count-text">0</strong></span>
                 <button class="btn-reset" onclick="location.reload()">Reiniciar</button>
             </div>
         </section>
