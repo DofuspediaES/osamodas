@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnFilter = document.getElementById('btn-filter');
     const errorMsg = document.getElementById('error-msg');
 
-    // Iniciar el juego
     btnGenerate.addEventListener('click', () => {
         const t = parseInt(document.getElementById('count-terra').value) || 0;
         const f = parseInt(document.getElementById('count-fire').value) || 0;
@@ -14,62 +13,73 @@ document.addEventListener('DOMContentLoaded', () => {
         const a = parseInt(document.getElementById('count-air').value) || 0;
 
         if (t + f + w + a !== 4) {
-            errorMsg.innerText = "Error: La suma debe ser exactamente 4";
+            errorMsg.innerText = "⚠️ La suma de elementos debe ser 4";
             return;
         }
 
-        errorMsg.innerText = "";
-        
-        // Crear lista base de elementos
         let base = [];
         for(let i=0; i<t; i++) base.push("tierra");
         for(let i=0; i<f; i++) base.push("fuego");
         for(let i=0; i<w; i++) base.push("agua");
         for(let i=0; i<a; i++) base.push("aire");
 
-        possibilities = generatePermutations(base);
+        possibilities = generateUniquePermutations(base);
         document.getElementById('part1').classList.add('hidden');
         document.getElementById('part2').classList.remove('hidden');
         
-        nextStep();
+        updateUI();
     });
 
-    // Filtrar resultados
     btnFilter.addEventListener('click', () => {
         const white = parseInt(document.getElementById('f-white').value) || 0;
         const black = parseInt(document.getElementById('f-black').value) || 0;
 
-        if (white === 4) {
-            showFinal(currentGuess);
+        // Validación de imposibilidad física del Mastermind
+        if (white === 3 && black === 1) {
+            alert("Error lógico: Es imposible tener 3 blancos y 1 negro. Revisa los círculos.");
+            return;
+        }
+        if (white + black > 4) {
+            alert("Error: La suma de blancos y negros no puede ser mayor a 4.");
             return;
         }
 
-        possibilities = possibilities.filter(p => {
+        // Filtrar combinaciones
+        const newPossibilities = possibilities.filter(p => {
             const feedback = getFeedback(currentGuess, p);
             return feedback.white === white && feedback.black === black;
         });
 
-        if (possibilities.length === 0) {
-            alert("No quedan combinaciones posibles. ¿Te has equivocado en algún número?");
-            location.reload();
+        if (newPossibilities.length === 0) {
+            alert("❌ No quedan combinaciones. Esto ocurre si:\n1. Has contado mal los elementos al principio.\n2. Has puesto mal el número de círculos Blancos/Negros.");
         } else {
-            nextStep();
+            possibilities = newPossibilities;
+            if (white === 4) {
+                showFinal(currentGuess);
+            } else {
+                updateUI();
+            }
         }
     });
 
-    function nextStep() {
-        currentGuess = possibilities[0];
+    function updateUI() {
+        if (possibilities.length === 1) {
+            showFinal(possibilities[0]);
+            return;
+        }
+        currentGuess = possibilities[0]; 
         document.getElementById('count-rem').innerText = possibilities.length;
         renderPills(currentGuess, 'current-guess');
         
-        if (possibilities.length === 1) {
-            showFinal(possibilities[0]);
-        }
+        // Limpiar inputs para el siguiente turno
+        document.getElementById('f-white').value = 0;
+        document.getElementById('f-black').value = 0;
     }
 
     function showFinal(solution) {
         document.getElementById('guess-area').classList.add('hidden');
         document.getElementById('result-area').classList.remove('hidden');
+        document.getElementById('count-rem').innerText = "1";
         renderPills(solution, 'final-solution');
     }
 
@@ -84,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Algoritmo de Mastermind (Comparación)
     function getFeedback(guess, solution) {
         let white = 0;
         let black = 0;
@@ -109,8 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return { white, black };
     }
 
-    // Generar todas las permutaciones únicas
-    function generatePermutations(arr) {
+    function generateUniquePermutations(arr) {
         let results = [];
         const permute = (current, remaining) => {
             if (remaining.length === 0) {
