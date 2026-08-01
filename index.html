@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a1a1a;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,12 +22,13 @@
         }
 
         .container {
-            background: white;
+            background: #2a2a2a;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             max-width: 600px;
             width: 100%;
             padding: 40px;
+            border: 2px solid #444;
         }
 
         .header {
@@ -37,12 +38,12 @@
 
         .header h1 {
             font-size: 2.5em;
-            color: #333;
+            color: #fff;
             margin-bottom: 10px;
         }
 
         .header p {
-            color: #666;
+            color: #aaa;
             font-size: 1.1em;
         }
 
@@ -60,22 +61,33 @@
             font-weight: bold;
             color: white;
             font-size: 0.9em;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .element-badge:hover {
+            transform: scale(1.05);
         }
 
         .element-badge.aire {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #2ecc71;
+            color: #fff;
         }
 
         .element-badge.tierra {
-            background: linear-gradient(135deg, #8B6914, #D4A574);
+            background: #8B6914;
+            color: #fff;
         }
 
         .element-badge.fuego {
-            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            background: #e74c3c;
+            color: #fff;
         }
 
         .element-badge.agua {
-            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            background: #3498db;
+            color: #fff;
         }
 
         .section {
@@ -84,10 +96,10 @@
 
         .section-title {
             font-size: 1.3em;
-            color: #333;
+            color: #fff;
             margin-bottom: 15px;
             font-weight: bold;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
         }
 
@@ -99,17 +111,41 @@
         }
 
         .guess-item {
-            background: #f0f0f0;
+            background: #3a3a3a;
             padding: 15px;
             border-radius: 10px;
             text-align: center;
             font-weight: bold;
-            color: #333;
+            color: #fff;
             min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #ddd;
+            border: 2px solid #555;
+        }
+
+        .guess-item.aire {
+            background: #2ecc71;
+            color: #fff;
+            border-color: #27ae60;
+        }
+
+        .guess-item.tierra {
+            background: #8B6914;
+            color: #fff;
+            border-color: #6b5010;
+        }
+
+        .guess-item.fuego {
+            background: #e74c3c;
+            color: #fff;
+            border-color: #c0392b;
+        }
+
+        .guess-item.agua {
+            background: #3498db;
+            color: #fff;
+            border-color: #2980b9;
         }
 
         .feedback-input {
@@ -126,22 +162,25 @@
 
         .feedback-group label {
             margin-bottom: 8px;
-            color: #333;
+            color: #fff;
             font-weight: bold;
             font-size: 0.95em;
         }
 
         .feedback-group input {
             padding: 12px;
-            border: 2px solid #ddd;
+            border: 2px solid #555;
             border-radius: 8px;
             font-size: 1em;
+            background: #3a3a3a;
+            color: #fff;
             transition: border-color 0.3s;
         }
 
         .feedback-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #3498db;
+            background: #444;
         }
 
         .circle-display {
@@ -150,23 +189,24 @@
             justify-content: center;
             margin-top: 15px;
             flex-wrap: wrap;
+            min-height: 40px;
         }
 
         .circle {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            border: 2px solid #ddd;
+            border: 2px solid #555;
         }
 
         .circle.white {
-            background: white;
-            border-color: #333;
+            background: #fff;
+            border-color: #fff;
         }
 
         .circle.black {
             background: #333;
-            border-color: #333;
+            border-color: #666;
         }
 
         .button-group {
@@ -187,53 +227,62 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #3498db;
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
+            background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #555;
+            cursor: not-allowed;
+            opacity: 0.5;
         }
 
         .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: 2px solid #ddd;
+            background: #3a3a3a;
+            color: #fff;
+            border: 2px solid #555;
         }
 
         .btn-secondary:hover {
-            background: #e0e0e0;
+            background: #444;
+            border-color: #3498db;
         }
 
         .btn-reset {
-            background: #FF6B6B;
+            background: #e74c3c;
             color: white;
         }
 
         .btn-reset:hover {
-            background: #FF5252;
+            background: #c0392b;
         }
 
         .attempts-log {
-            background: #f9f9f9;
+            background: #1a1a1a;
             border-radius: 10px;
             padding: 15px;
             max-height: 300px;
             overflow-y: auto;
+            border: 1px solid #444;
         }
 
         .attempt-item {
             padding: 10px;
             margin-bottom: 10px;
-            background: white;
-            border-left: 4px solid #667eea;
+            background: #3a3a3a;
+            border-left: 4px solid #3498db;
             border-radius: 5px;
             font-size: 0.95em;
+            color: #fff;
         }
 
         .attempt-item strong {
-            color: #667eea;
+            color: #3498db;
         }
 
         .status-message {
@@ -246,31 +295,44 @@
         }
 
         .status-message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #27ae60;
+            color: #fff;
+            border: 1px solid #229954;
             display: block;
         }
 
         .status-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #e74c3c;
+            color: #fff;
+            border: 1px solid #c0392b;
             display: block;
         }
 
         .status-message.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+            background: #3498db;
+            color: #fff;
+            border: 1px solid #2980b9;
             display: block;
         }
 
         .remaining-combinations {
             text-align: center;
             font-size: 0.95em;
-            color: #666;
+            color: #aaa;
             margin-top: 10px;
+        }
+
+        .instruction-box {
+            background: #3a3a3a;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .instruction-box strong {
+            color: #3498db;
         }
 
         @media (max-width: 600px) {
@@ -304,6 +366,14 @@
 
         <div id="statusMessage" class="status-message"></div>
 
+        <div class="instruction-box">
+            <strong>📝 Instrucciones:</strong><br>
+            1. Haz clic en "Obtener Siguiente Intento"<br>
+            2. Usa esa combinación en el juego<br>
+            3. Ingresa los círculos que obtuviste<br>
+            4. El programa sugiere el próximo intento
+        </div>
+
         <div class="section">
             <div class="section-title">📋 Intento Actual</div>
             <div class="guess-display" id="guessDisplay">
@@ -318,7 +388,7 @@
         </div>
 
         <div class="section">
-            <div class="section-title">🎮 Ingresa tu Feedback</div>
+            <div class="section-title">🎮 Tu Feedback del Juego</div>
             <div class="feedback-input">
                 <div class="feedback-group">
                     <label for="whiteCircles">⚪ Círculos Blancos:</label>
@@ -333,15 +403,15 @@
             <div id="feedbackDisplay" class="circle-display"></div>
 
             <div class="button-group">
-                <button class="btn-primary" onclick="submitFeedback()">Enviar Feedback</button>
-                <button class="btn-secondary" onclick="nextGuess()">Obtener Siguiente Intento</button>
+                <button class="btn-primary" onclick="submitFeedback()">✓ Enviar Feedback</button>
+                <button class="btn-secondary" onclick="nextGuess()">→ Siguiente Intento</button>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-title">📊 Historial de Intentos</div>
+            <div class="section-title">📊 Historial</div>
             <div class="attempts-log" id="attemptsLog">
-                <p style="color: #999; text-align: center;">Aquí aparecerán tus intentos...</p>
+                <p style="color: #666; text-align: center;">Aquí aparecerán tus intentos...</p>
             </div>
         </div>
 
@@ -486,12 +556,12 @@
             blackInput.value = 0;
             displayFeedback(0, 0);
 
-            showStatus(`Intento ${solver.attempts.length + 1}: Ingresa el feedback`, 'info');
+            showStatus(`📍 Intento ${solver.attempts.length + 1} - Usa esta combinación en el juego`, 'info');
         }
 
         function submitFeedback() {
             if (!solver.currentGuess) {
-                showStatus('Primero obtén un intento', 'error');
+                showStatus('Primero haz clic en "Siguiente Intento"', 'error');
                 return;
             }
 
@@ -527,9 +597,9 @@
             updateCombinationCount();
 
             if (solver.possibleCombinations.length === 0) {
-                showStatus('Error: No hay combinaciones posibles', 'error');
+                showStatus('Error: No hay combinaciones posibles. Revisa el feedback.', 'error');
             } else {
-                showStatus(`Combinaciones restantes: ${solver.possibleCombinations.length}`, 'info');
+                showStatus(`✓ Feedback guardado. Combinaciones restantes: ${solver.possibleCombinations.length}`, 'success');
                 nextGuess();
             }
         }
@@ -544,7 +614,7 @@
             item.className = 'attempt-item';
             item.innerHTML = `
                 <strong>Intento ${solver.attempts.length}:</strong> ${guess.join(' → ')}<br>
-                ⚪ ${white} | ⚫ ${black}
+                ⚪ ${white} blanco${white !== 1 ? 's' : ''} | ⚫ ${black} negro${black !== 1 ? 's' : ''}
             `;
             log.appendChild(item);
             log.scrollTop = log.scrollHeight;
@@ -559,7 +629,7 @@
             };
 
             document.getElementById('attemptsLog').innerHTML = 
-                '<p style="color: #999; text-align: center;">Aquí aparecerán tus intentos...</p>';
+                '<p style="color: #666; text-align: center;">Aquí aparecerán tus intentos...</p>';
             document.getElementById('whiteCircles').value = 0;
             document.getElementById('blackCircles').value = 0;
             document.getElementById('statusMessage').className = 'status-message';
@@ -568,14 +638,14 @@
             displayGuess(['-', '-', '-', '-']);
             displayFeedback(0, 0);
             updateCombinationCount();
-            showStatus('Reiniciado. Haz clic en "Obtener Siguiente Intento"', 'info');
+            showStatus('✓ Reiniciado. Haz clic en "Siguiente Intento"', 'info');
         }
 
         // Inicializar
         window.addEventListener('load', () => {
             displayGuess(['-', '-', '-', '-']);
             displayFeedback(0, 0);
-            showStatus('¡Bienvenido! Haz clic en "Obtener Siguiente Intento"', 'info');
+            showStatus('¡Bienvenido! Haz clic en "→ Siguiente Intento" para comenzar', 'info');
         });
     </script>
 </body>
