@@ -1,219 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Osamodas Mastermind Solver</title>
-
-<link rel="stylesheet" href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osamodas Mastermind Solver - Dofus</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-<div class="contenedor">
-
-<h1>🦉 Osamodas Mastermind Solver</h1>
-
-<p class="descripcion">
-Descubre la combinación correcta del minijuego de Osamodas utilizando la lógica de Mastermind.
-</p>
-
-<hr>
-
-<h2>PARTE 1</h2>
-
-<p class="texto">
-Usa cuatro veces cada elemento en el juego e introduce únicamente la cantidad de círculos blancos obtenidos.
-</p>
-
-<div class="parte1">
-
-<div class="elemento fuego">
-
-<div class="icono">🔥</div>
-
-<h3>Fuego ×4</h3>
-
-<input
-type="number"
-id="F_b"
-min="0"
-max="4"
-value="0">
-
-</div>
-
-
-<div class="elemento aire">
-
-<div class="icono">🌪</div>
-
-<h3>Aire ×4</h3>
-
-<input
-type="number"
-id="A_b"
-min="0"
-max="4"
-value="0">
-
-</div>
-
-
-<div class="elemento agua">
-
-<div class="icono">💧</div>
-
-<h3>Agua ×4</h3>
-
-<input
-type="number"
-id="W_b"
-min="0"
-max="4"
-value="0">
-
-</div>
-
-
-<div class="elemento tierra">
-
-<div class="icono">🌍</div>
-
-<h3>Tierra ×4</h3>
-
-<input
-type="number"
-id="T_b"
-min="0"
-max="4"
-value="0">
-
-</div>
-
-</div>
-
-<button
-id="btnGenerar"
-onclick="crearSolver()">
-
-Generar combinaciones
-
-</button>
-
-<hr>
-
-<div
-id="parte2"
-style="display:none;">
-
-<h2>PARTE 2</h2>
-
-<p class="texto">
-
-Prueba la combinación sugerida dentro del juego.
-
-Después introduce el resultado obtenido.
-
-</p>
-
-
-<div class="cajaPrueba">
-
-<div>
-
-<h3>Prueba recomendada</h3>
-
-<div id="sugerencia">
-
-Esperando...
-
-</div>
-
-</div>
-
-<div class="resultado">
-
-<label>
-
-⚪ Blancos
-
-<input
-type="number"
-id="resultadoB"
-min="0"
-max="4"
-value="0">
-
-</label>
-
-<label>
-
-⚫ Negros
-
-<input
-type="number"
-id="resultadoN"
-min="0"
-max="4"
-value="0">
-
-</label>
-
-<button
-onclick="guardarResultado()">
-
-Confirmar resultado
-
-</button>
-
-</div>
-
-</div>
-
-<hr>
-
-<h2>Historial</h2>
-
-<div id="historial">
-
-Aún no hay intentos.
-
-</div>
-
-<hr>
-
-<h2>Estado</h2>
-
-<div id="estado">
-
-Sin iniciar.
-
-</div>
-
-</div>
-
-<hr>
-
-<div class="botonesInferiores">
-
-<button
-onclick="reiniciar()">
-
-🔄 Reiniciar Solver
-
-</button>
-
-</div>
-
-</div>
-
-<script src="script.js"></script>
-
+    <div class="container">
+        <h1>Osa Mastermind Solver</h1>
+        
+        <!-- Parte 1: Configuración de Elementos -->
+        <section id="part1">
+            <h2>Paso 1: Cantidad de Elementos</h2>
+            <p>Lanza 4 veces cada hechizo para saber cuántos hay de cada uno.</p>
+            <div class="input-group">
+                <div class="field">
+                    <label class="icon-terra">🪨 Tierra:</label>
+                    <input type="number" id="count-terra" min="0" max="4" value="0">
+                </div>
+                <div class="field">
+                    <label class="icon-fire">🔥 Fuego:</label>
+                    <input type="number" id="count-fire" min="0" max="4" value="0">
+                </div>
+                <div class="field">
+                    <label class="icon-water">💧 Agua:</label>
+                    <input type="number" id="count-water" min="0" max="4" value="0">
+                </div>
+                <div class="field">
+                    <label class="icon-air">💨 Aire:</label>
+                    <input type="number" id="count-air" min="0" max="4" value="0">
+                </div>
+            </div>
+            <p id="error-msg" class="error"></p>
+            <button id="btn-generate">Generar Combinaciones</button>
+        </section>
+
+        <!-- Parte 2: El Solucionador -->
+        <section id="part2" class="hidden">
+            <h2>Paso 2: Encontrar la Solución</h2>
+            <div id="guess-container">
+                <p>Prueba esta combinación en el juego:</p>
+                <div id="current-guess" class="combination-display"></div>
+                
+                <div class="feedback-inputs">
+                    <div class="field">
+                        <label>⚪ Blancos (Bien puestos):</label>
+                        <input type="number" id="feedback-white" min="0" max="4" value="0">
+                    </div>
+                    <div class="field">
+                        <label>⚫ Negros (Mal puestos):</label>
+                        <input type="number" id="feedback-black" min="0" max="4" value="0">
+                    </div>
+                </div>
+                <button id="btn-filter">Filtrar y Siguiente</button>
+            </div>
+            
+            <div id="stats">
+                <p>Posibilidades restantes: <span id="remaining-count">0</span></p>
+            </div>
+
+            <div id="solution-found" class="hidden">
+                <h3 class="success">¡Solución Encontrada!</h3>
+                <div id="final-solution" class="combination-display"></div>
+            </div>
+
+            <button class="btn-secondary" onclick="location.reload()">Reiniciar</button>
+        </section>
+    </div>
+    <script src="script.js"></script>
 </body>
-
 </html>
