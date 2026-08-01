@@ -1,152 +1,133 @@
-const ELEMENTS = ["tierra", "fuego", "agua", "aire"];
-let possibleCombinations = [];
-let currentGuess = null;
+document.addEventListener('DOMContentLoaded', () => {
+    let possibilities = [];
+    let currentGuess = [];
 
-// DOM Elements
-const part1 = document.getElementById('part1');
-const part2 = document.getElementById('part2');
-const errorMsg = document.getElementById('error-msg');
-const remainingSpan = document.getElementById('remaining-count');
-const guessDisplay = document.getElementById('current-guess');
+    const btnGenerate = document.getElementById('btn-generate');
+    const btnFilter = document.getElementById('btn-filter');
+    const errorMsg = document.getElementById('error-msg');
 
-document.getElementById('btn-generate').addEventListener('click', startSolver);
-document.getElementById('btn-filter').addEventListener('click', handleFilter);
+    // Iniciar el juego
+    btnGenerate.addEventListener('click', () => {
+        const t = parseInt(document.getElementById('count-terra').value) || 0;
+        const f = parseInt(document.getElementById('count-fire').value) || 0;
+        const w = parseInt(document.getElementById('count-water').value) || 0;
+        const a = parseInt(document.getElementById('count-air').value) || 0;
 
-function startSolver() {
-    const counts = {
-        tierra: parseInt(document.getElementById('count-terra').value) || 0,
-        fuego: parseInt(document.getElementById('count-fuego').value) || 0,
-        agua: parseInt(document.getElementById('count-water').value) || 0,
-        aire: parseInt(document.getElementById('count-air').value) || 0
-    };
-
-    const total = Object.values(counts).reduce((a, b) => a + b, 0);
-
-    if (total !== 4) {
-        errorMsg.innerText = `La suma debe ser 4 (tienes ${total})`;
-        return;
-    }
-
-    errorMsg.innerText = "";
-    
-    // Generar multiset base
-    let baseItems = [];
-    for (let el of ELEMENTS) {
-        for (let i = 0; i < counts[el]; i++) baseItems.push(el);
-    }
-
-    // Generar permutaciones únicas
-    possibleCombinations = getUniquePermutations(baseItems);
-    
-    part1.classList.add('hidden');
-    part2.classList.remove('hidden');
-    
-    showNextGuess();
-}
-
-function getUniquePermutations(arr) {
-    const results = [];
-
-    function permute(current, remaining) {
-        if (remaining.length === 0) {
-            results.push(current);
+        if (t + f + w + a !== 4) {
+            errorMsg.innerText = "Error: La suma debe ser exactamente 4";
             return;
         }
-        const seen = new Set();
-        for (let i = 0; i < remaining.length; i++) {
-            if (seen.has(remaining[i])) continue;
-            seen.add(remaining[i]);
-            
-            const next = [...current, remaining[i]];
-            const rest = [...remaining.slice(0, i), ...remaining.slice(i + 1)];
-            permute(next, rest);
+
+        errorMsg.innerText = "";
+        
+        // Crear lista base de elementos
+        let base = [];
+        for(let i=0; i<t; i++) base.push("tierra");
+        for(let i=0; i<f; i++) base.push("fuego");
+        for(let i=0; i<w; i++) base.push("agua");
+        for(let i=0; i<a; i++) base.push("aire");
+
+        possibilities = generatePermutations(base);
+        document.getElementById('part1').classList.add('hidden');
+        document.getElementById('part2').classList.remove('hidden');
+        
+        nextStep();
+    });
+
+    // Filtrar resultados
+    btnFilter.addEventListener('click', () => {
+        const white = parseInt(document.getElementById('f-white').value) || 0;
+        const black = parseInt(document.getElementById('f-black').value) || 0;
+
+        if (white === 4) {
+            showFinal(currentGuess);
+            return;
+        }
+
+        possibilities = possibilities.filter(p => {
+            const feedback = getFeedback(currentGuess, p);
+            return feedback.white === white && feedback.black === black;
+        });
+
+        if (possibilities.length === 0) {
+            alert("No quedan combinaciones posibles. ¿Te has equivocado en algún número?");
+            location.reload();
+        } else {
+            nextStep();
+        }
+    });
+
+    function nextStep() {
+        currentGuess = possibilities[0];
+        document.getElementById('count-rem').innerText = possibilities.length;
+        renderPills(currentGuess, 'current-guess');
+        
+        if (possibilities.length === 1) {
+            showFinal(possibilities[0]);
         }
     }
 
-    permute([], arr);
-    return results;
-}
-
-function showNextGuess() {
-    if (possibleCombinations.length === 0) {
-        alert("¡Error! No hay combinaciones que coincidan con tus pistas. Revisa los datos.");
-        location.reload();
-        return;
+    function showFinal(solution) {
+        document.getElementById('guess-area').classList.add('hidden');
+        document.getElementById('result-area').classList.remove('hidden');
+        renderPills(solution, 'final-solution');
     }
 
-    // Estrategia: Simplemente tomar el primero de la lista restante
-    currentGuess = possibleCombinations[0];
-    renderCombination(currentGuess, guessDisplay);
-    remainingSpan.innerText = possibleCombinations.length;
-
-    if (possibleCombinations.length === 1) {
-        document.getElementById('guess-container').classList.add('hidden');
-        document.getElementById('solution-found').classList.remove('hidden');
-        renderCombination(currentGuess, document.getElementById('final-solution'));
-    }
-}
-
-function renderCombination(arr, container) {
-    container.innerHTML = "";
-    arr.forEach(el => {
-        const span = document.createElement('span');
-        span.className = `element-pill pill-${el}`;
-        span.innerText = el;
-        container.appendChild(span);
-    });
-}
-
-function handleFilter() {
-    const white = parseInt(document.getElementById('feedback-white').value) || 0;
-    const black = parseInt(document.getElementById('feedback-black').value) || 0;
-
-    if (white === 4) {
-        document.getElementById('guess-container').classList.add('hidden');
-        document.getElementById('solution-found').classList.remove('hidden');
-        renderCombination(currentGuess, document.getElementById('final-solution'));
-        return;
+    function renderPills(arr, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+        arr.forEach(el => {
+            const div = document.createElement('div');
+            div.className = `pill pill-${el}`;
+            div.innerText = el;
+            container.appendChild(div);
+        });
     }
 
-    // Filtrar: mantener solo combinaciones que darían el mismo feedback
-    possibleCombinations = possibleCombinations.filter(combo => {
-        const res = getFeedback(currentGuess, combo);
-        return res.white === white && res.black === black;
-    });
+    // Algoritmo de Mastermind (Comparación)
+    function getFeedback(guess, solution) {
+        let white = 0;
+        let black = 0;
+        let g = [...guess];
+        let s = [...solution];
 
-    // Limpiar inputs
-    document.getElementById('feedback-white').value = 0;
-    document.getElementById('feedback-black').value = 0;
-
-    showNextGuess();
-}
-
-/**
- * Lógica Mastermind: Compara un intento con una solución potencial
- */
-function getFeedback(guess, solution) {
-    let white = 0;
-    let black = 0;
-    const g = [...guess];
-    const s = [...solution];
-
-    // Primero Blancos (Posición correcta)
-    for (let i = 0; i < 4; i++) {
-        if (g[i] === s[i]) {
-            white++;
-            g[i] = s[i] = null; // Marcar como usado
-        }
-    }
-
-    // Luego Negros (Elemento existe pero en otra posición)
-    for (let i = 0; i < 4; i++) {
-        if (g[i] !== null) {
-            let foundIndex = s.indexOf(g[i]);
-            if (foundIndex !== -1) {
-                black++;
-                s[foundIndex] = null;
+        for (let i = 0; i < 4; i++) {
+            if (g[i] === s[i]) {
+                white++;
+                g[i] = s[i] = null;
             }
         }
+        for (let i = 0; i < 4; i++) {
+            if (g[i] !== null) {
+                let idx = s.indexOf(g[i]);
+                if (idx !== -1) {
+                    black++;
+                    s[idx] = null;
+                }
+            }
+        }
+        return { white, black };
     }
 
-    return { white, black };
-}
+    // Generar todas las permutaciones únicas
+    function generatePermutations(arr) {
+        let results = [];
+        const permute = (current, remaining) => {
+            if (remaining.length === 0) {
+                results.push(current);
+                return;
+            }
+            let seen = new Set();
+            for (let i = 0; i < remaining.length; i++) {
+                if (seen.has(remaining[i])) continue;
+                seen.add(remaining[i]);
+                permute(
+                    [...current, remaining[i]],
+                    [...remaining.slice(0, i), ...remaining.slice(i + 1)]
+                );
+            }
+        };
+        permute([], arr);
+        return results;
+    }
+});
