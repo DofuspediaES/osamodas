@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osamodas Solver v2</title>
+    <title>Osamodas Solver Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,36 +11,23 @@
         <h1>Osa Mastermind</h1>
         
         <section id="part1">
-            <p class="instruction">1. Lanza 4 veces cada hechizo y anota cuántos círculos totales aparecen.</p>
+            <p class="instruction">Paso 1: Lanza 4 veces cada hechizo y cuenta cuántos círculos salen en total (blancos + negros).</p>
             <div class="input-grid">
-                <div class="field terra">
-                    <label>🪨 Tierra</label>
-                    <input type="number" id="count-terra" value="0" min="0" max="4">
-                </div>
-                <div class="field fire">
-                    <label>🔥 Fuego</label>
-                    <input type="number" id="count-fire" value="0" min="0" max="4">
-                </div>
-                <div class="field water">
-                    <label>💧 Agua</label>
-                    <input type="number" id="count-water" value="0" min="0" max="4">
-                </div>
-                <div class="field air">
-                    <label>💨 Aire</label>
-                    <input type="number" id="count-air" value="0" min="0" max="4">
-                </div>
+                <div class="field terra"><label>🪨 Tierra</label><input type="number" id="count-terra" value="0" min="0" max="4"></div>
+                <div class="field fire"><label>🔥 Fuego</label><input type="number" id="count-fire" value="0" min="0" max="4"></div>
+                <div class="field water"><label>💧 Agua</label><input type="number" id="count-water" value="0" min="0" max="4"></div>
+                <div class="field air"><label>💨 Aire</label><input type="number" id="count-air" value="0" min="0" max="4"></div>
             </div>
             <p id="error-msg" class="error"></p>
-            <button id="btn-generate">CALCULAR COMBINACIONES</button>
+            <button id="btn-generate">GENERAR</button>
         </section>
 
         <section id="part2" class="hidden">
             <div id="guess-area">
-                <p>Intento sugerido:</p>
+                <p>Prueba esto en el juego:</p>
                 <div id="current-guess" class="display-box"></div>
                 
                 <div class="feedback-panel">
-                    <p>Introduce el resultado del juego:</p>
                     <div class="feedback-row">
                         <div class="field">
                             <label>⚪ Blancos</label>
@@ -51,7 +38,7 @@
                             <input type="number" id="f-black" value="0" min="0" max="4">
                         </div>
                     </div>
-                    <button id="btn-filter">APLICAR FILTRO</button>
+                    <button id="btn-filter">FILTRAR</button>
                 </div>
             </div>
 
@@ -62,7 +49,7 @@
             
             <div class="status-bar">
                 <span>Posibilidades: <strong id="count-rem">?</strong></span>
-                <button class="btn-small" onclick="location.reload()">Reiniciar</button>
+                <button class="btn-reset" onclick="location.reload()">Reiniciar</button>
             </div>
         </section>
     </div>
