@@ -41,6 +41,7 @@ return lista;
 
 
 
+
 function comparar(a,b){
 
 let blancos=0;
@@ -64,7 +65,6 @@ usadosB[i]=true;
 }
 
 
-
 for(let i=0;i<4;i++){
 
 if(!usadosA[i]){
@@ -74,7 +74,9 @@ for(let j=0;j<4;j++){
 if(!usadosB[j] && a[i]==b[j]){
 
 negros++;
+
 usadosB[j]=true;
+
 break;
 
 }
@@ -102,16 +104,11 @@ let cantidades={};
 
 for(let e of elementos){
 
-let id=e+"_n";
-
-let blancos =
+let blancos=
 Number(document.getElementById(e+"_b").value);
 
-let negros =
-Number(document.getElementById(e+"_n").value);
 
-
-cantidades[e]=blancos+negros;
+cantidades[e]=blancos;
 
 }
 
@@ -121,8 +118,8 @@ soluciones=generarCombinaciones();
 
 
 
-soluciones =
-soluciones.filter(c=>{
+soluciones=soluciones.filter(c=>{
+
 
 let cuenta={
 F:0,
@@ -137,35 +134,23 @@ cuenta[x]++;
 });
 
 
-return 
+return (
 cuenta.F==cantidades.F &&
 cuenta.A==cantidades.A &&
 cuenta.W==cantidades.W &&
-cuenta.T==cantidades.T;
+cuenta.T==cantidades.T
+);
 
 
 });
 
-let cuenta={F:0,A:0,W:0,T:0};
-
-
-c.forEach(x=>cuenta[x]++);
-
-
-
-return Object.keys(cuenta)
-.every(x=>cuenta[x]==cantidades[x]);
-
-});
-
-
-
-mostrar();
 
 
 document.getElementById("estado").innerHTML=
 "Soluciones posibles: "+soluciones.length;
 
+
+mostrar();
 
 }
 
@@ -188,7 +173,7 @@ return;
 
 
 intentoActual=
-soluciones[Math.floor(Math.random()*soluciones.length)];
+soluciones[0];
 
 
 
@@ -196,23 +181,6 @@ document.getElementById("sugerencia").innerHTML=
 convertir(intentoActual);
 
 
-}
-
-
-
-function convertir(c){
-
-return c.map(x=>{
-
-if(x=="F") return "🔥";
-
-if(x=="A") return "🌪";
-
-if(x=="W") return "💧";
-
-if(x=="T") return "🌍";
-
-}).join(" ");
 
 }
 
@@ -233,11 +201,9 @@ Number(document.getElementById("resultadoN").value);
 
 
 historial.push({
-
 intento:intentoActual,
 blancos,
 negros
-
 });
 
 
@@ -245,28 +211,54 @@ negros
 soluciones=
 soluciones.filter(sol=>{
 
+
 let r=comparar(intentoActual,sol);
 
 
-return r[0]==blancos &&
-r[1]==negros;
+return (
+r[0]==blancos &&
+r[1]==negros
+);
+
 
 });
+
+
+
+document.getElementById("estado").innerHTML=
+`
+Intentos: ${historial.length}
+<br>
+Soluciones restantes: ${soluciones.length}
+`;
 
 
 
 mostrar();
 
 
-document.getElementById("estado").innerHTML=
-`
-Intentos:
-${historial.length}
+}
 
-<br>
 
-Soluciones restantes:
-${soluciones.length}
-`;
+
+
+
+function convertir(c){
+
+
+return c.map(x=>{
+
+
+if(x=="F") return "🔥";
+
+if(x=="A") return "🌪";
+
+if(x=="W") return "💧";
+
+if(x=="T") return "🌍";
+
+
+}).join(" ");
+
 
 }
