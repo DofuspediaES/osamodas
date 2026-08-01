@@ -3,52 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osamodas Solver Pro</title>
+    <title>Osa Mastermind Solver</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Osa Mastermind</h1>
-        
+
+        <!-- PARTE 1: DETERMINAR CANTIDADES -->
         <section id="part1">
-            <p class="instruction">Paso 1: Lanza 4 veces cada hechizo y cuenta cuántos círculos salen en total (blancos + negros).</p>
-            <div class="input-grid">
-                <div class="field terra"><label>🪨 Tierra</label><input type="number" id="count-terra" value="0" min="0" max="4"></div>
-                <div class="field fire"><label>🔥 Fuego</label><input type="number" id="count-fire" value="0" min="0" max="4"></div>
-                <div class="field water"><label>💧 Agua</label><input type="number" id="count-water" value="0" min="0" max="4"></div>
-                <div class="field air"><label>💨 Aire</label><input type="number" id="count-air" value="0" min="0" max="4"></div>
+            <p class="instruction">Lanza 4 veces cada elemento. Indica cuántos círculos blancos salen por cada uno:</p>
+            <div class="grid-inputs">
+                <div class="card terra">
+                    <label>🪨 Tierra</label>
+                    <input type="number" id="in-tierra" value="0" min="0" max="4">
+                </div>
+                <div class="card fuego">
+                    <label>🔥 Fuego</label>
+                    <input type="number" id="in-fuego" value="0" min="0" max="4">
+                </div>
+                <div class="card agua">
+                    <label>💧 Agua</label>
+                    <input type="number" id="in-agua" value="0" min="0" max="4">
+                </div>
+                <div class="card aire">
+                    <label>💨 Aire</label>
+                    <input type="number" id="in-aire" value="0" min="0" max="4">
+                </div>
             </div>
             <p id="error-msg" class="error"></p>
-            <button id="btn-generate">GENERAR</button>
+            <button id="btn-start">GENERAR COMBINACIONES</button>
         </section>
 
+        <!-- PARTE 2: RESOLVER SECUENCIA -->
         <section id="part2" class="hidden">
-            <div id="guess-area">
-                <p>Prueba esto en el juego:</p>
-                <div id="current-guess" class="display-box"></div>
+            <div class="guess-section">
+                <p>Prueba esta combinación:</p>
+                <div id="display-guess" class="pill-container"></div>
                 
-                <div class="feedback-panel">
-                    <div class="feedback-row">
-                        <div class="field">
+                <div class="feedback-box">
+                    <p>Introduce los resultados:</p>
+                    <div class="feedback-inputs">
+                        <div class="f-field">
                             <label>⚪ Blancos</label>
-                            <input type="number" id="f-white" value="0" min="0" max="4">
+                            <input type="number" id="res-white" value="0" min="0" max="4">
                         </div>
-                        <div class="field">
+                        <div class="f-field">
                             <label>⚫ Negros</label>
-                            <input type="number" id="f-black" value="0" min="0" max="4">
+                            <input type="number" id="res-black" value="0" min="0" max="4">
                         </div>
                     </div>
-                    <button id="btn-filter">FILTRAR</button>
+                    <button id="btn-filter">FILTRAR OPCIONES</button>
                 </div>
             </div>
 
-            <div id="result-area" class="hidden">
-                <h2 class="success">¡SOLUCIÓN!</h2>
-                <div id="final-solution" class="display-box"></div>
-            </div>
-            
-            <div class="status-bar">
-                <span>Posibilidades: <strong id="count-rem">?</strong></span>
+            <div class="info-bar">
+                <span>Posibles: <strong id="count-text">0</strong></span>
                 <button class="btn-reset" onclick="location.reload()">Reiniciar</button>
             </div>
         </section>
