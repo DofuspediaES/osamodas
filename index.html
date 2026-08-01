@@ -3,49 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osamodas Solver - Posicional</title>
+    <title>Osamodas Solver - Modo Experto</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Osa Solver Posicional</h1>
+        <h1>Osa Mastermind Pro</h1>
 
         <!-- PARTE 1 -->
         <section id="part1">
-            <p class="instruction">1. Lanza 4 veces cada hechizo. <br>Anota cuántos círculos blancos salieron por cada uno:</p>
+            <p class="instruction">1. Indica cuántos círculos salieron al lanzar 4 veces cada hechizo:</p>
             <div class="grid-inputs">
                 <div class="card t"><label>🪨 Tierra</label><input type="number" id="in-tierra" value="0"></div>
                 <div class="card f"><label>🔥 Fuego</label><input type="number" id="in-fuego" value="0"></div>
                 <div class="card w"><label>💧 Agua</label><input type="number" id="in-agua" value="0"></div>
                 <div class="card a"><label>💨 Aire</label><input type="number" id="in-aire" value="0"></div>
             </div>
-            <button id="btn-start">GENERAR POSIBILIDADES</button>
+            <button id="btn-start">GENERAR</button>
         </section>
 
         <!-- PARTE 2 -->
         <section id="part2" class="hidden">
             <div id="solver-view">
-                <p class="instruction">Lanza este orden y marca <b>el círculo exacto</b> que salió en cada posición:</p>
-                <div id="solver-grid">
-                    <!-- Los slots se generan por JS -->
+                <p class="instruction">Prueba este orden en el juego:</p>
+                <div id="guess-display" class="pill-container"></div>
+                
+                <div class="feedback-panel">
+                    <p>Marca cuántos círculos de cada color salieron:</p>
+                    <div class="circles-row">
+                        <div class="circle-btn" data-state="none" id="c1"></div>
+                        <div class="circle-btn" data-state="none" id="c2"></div>
+                        <div class="circle-btn" data-state="none" id="c3"></div>
+                        <div class="circle-btn" data-state="none" id="c4"></div>
+                    </div>
+                    <button id="btn-filter">FILTRAR RESULTADO</button>
                 </div>
-                <button id="btn-filter">FILTRAR CON ESTE PATRÓN</button>
             </div>
 
-            <div id="msg-error" class="error-panel hidden">
-                ⚠️ No hay combinaciones con ese patrón. <br>
-                Revisa los círculos o los elementos iniciales.
-                <button onclick="undoFilter()" class="btn-undo">Deshacer último filtro</button>
-            </div>
-
+            <!-- SOLUCIÓN FINAL -->
             <div id="solution-view" class="hidden">
-                <h2 class="success-text">SOLUCIÓN ENCONTRADA:</h2>
+                <h2 class="success-text">¡SOLUCIÓN!</h2>
                 <div id="final-pills" class="pill-container"></div>
+                <button onclick="location.reload()" class="btn-reset">Reiniciar</button>
             </div>
 
             <div class="footer">
                 <span>Posibilidades: <strong id="count-text">0</strong></span>
-                <button class="btn-reset" onclick="location.reload()">Reiniciar Todo</button>
+                <button class="btn-reset-small" onclick="location.reload()">Reset</button>
             </div>
         </section>
     </div>
