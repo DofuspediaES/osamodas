@@ -3,112 +3,580 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osamodas Solver</title>
+    <title>Solucionador de Osamodas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <link rel="stylesheet" href="style.css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .elements-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .element-badge {
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .element-badge.aire {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .element-badge.tierra {
+            background: linear-gradient(135deg, #8B6914, #D4A574);
+        }
+
+        .element-badge.fuego {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+        }
+
+        .element-badge.agua {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .guess-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .guess-item {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ddd;
+        }
+
+        .feedback-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .feedback-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-group label {
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .feedback-group input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .feedback-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .circle-display {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+
+        .circle.white {
+            background: white;
+            border-color: #333;
+        }
+
+        .circle.black {
+            background: #333;
+            border-color: #333;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-reset {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #FF5252;
+        }
+
+        .attempts-log {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .attempt-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+
+        .attempt-item strong {
+            color: #667eea;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .status-message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
+        .remaining-combinations {
+            text-align: center;
+            font-size: 0.95em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .elements-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>🧩 Osamodas</h1>
+            <p>Solucionador Inteligente de Códigos</p>
+        </div>
 
-<div class="container">
+        <div class="elements-info">
+            <div class="element-badge aire">🌪️ Aire</div>
+            <div class="element-badge tierra">🌍 Tierra</div>
+            <div class="element-badge fuego">🔥 Fuego</div>
+            <div class="element-badge agua">💧 Agua</div>
+        </div>
 
-    <h1>🧩 Osamodas Solver</h1>
+        <div id="statusMessage" class="status-message"></div>
 
-    <p class="descripcion">
-        Introduce el intento realizado y el resultado obtenido para encontrar la combinación correcta.
-    </p>
+        <div class="section">
+            <div class="section-title">📋 Intento Actual</div>
+            <div class="guess-display" id="guessDisplay">
+                <div class="guess-item">-</div>
+                <div class="guess-item">-</div>
+                <div class="guess-item">-</div>
+                <div class="guess-item">-</div>
+            </div>
+            <div class="remaining-combinations">
+                Combinaciones posibles: <strong id="combinationCount">256</strong>
+            </div>
+        </div>
 
-    <div class="intento">
+        <div class="section">
+            <div class="section-title">🎮 Ingresa tu Feedback</div>
+            <div class="feedback-input">
+                <div class="feedback-group">
+                    <label for="whiteCircles">⚪ Círculos Blancos:</label>
+                    <input type="number" id="whiteCircles" min="0" max="4" value="0">
+                </div>
+                <div class="feedback-group">
+                    <label for="blackCircles">⚫ Círculos Negros:</label>
+                    <input type="number" id="blackCircles" min="0" max="4" value="0">
+                </div>
+            </div>
 
-        <select id="slot1">
-            <option>Agua</option>
-            <option>Aire</option>
-            <option>Tierra</option>
-            <option>Fuego</option>
-        </select>
+            <div id="feedbackDisplay" class="circle-display"></div>
 
-        <select id="slot2">
-            <option>Agua</option>
-            <option>Aire</option>
-            <option>Tierra</option>
-            <option>Fuego</option>
-        </select>
+            <div class="button-group">
+                <button class="btn-primary" onclick="submitFeedback()">Enviar Feedback</button>
+                <button class="btn-secondary" onclick="nextGuess()">Obtener Siguiente Intento</button>
+            </div>
+        </div>
 
-        <select id="slot3">
-            <option>Agua</option>
-            <option>Aire</option>
-            <option>Tierra</option>
-            <option>Fuego</option>
-        </select>
+        <div class="section">
+            <div class="section-title">📊 Historial de Intentos</div>
+            <div class="attempts-log" id="attemptsLog">
+                <p style="color: #999; text-align: center;">Aquí aparecerán tus intentos...</p>
+            </div>
+        </div>
 
-        <select id="slot4">
-            <option>Agua</option>
-            <option>Aire</option>
-            <option>Tierra</option>
-            <option>Fuego</option>
-        </select>
-
+        <button class="btn-reset" onclick="resetSolver()" style="width: 100%;">🔄 Reiniciar</button>
     </div>
 
-    <div class="resultado">
+    <script>
+        const ELEMENTS = ['Aire', 'Tierra', 'Fuego', 'Agua'];
+        const SEQUENCE_LENGTH = 4;
 
-        <label>
-            ⚪ Blancos
-            <input id="white" type="number" min="0" max="4" value="0">
-        </label>
+        let solver = {
+            possibleCombinations: generateAllCombinations(),
+            attempts: [],
+            feedbackHistory: [],
+            currentGuess: null
+        };
 
-        <label>
-            ⚫ Negros
-            <input id="black" type="number" min="0" max="4" value="0">
-        </label>
+        function generateAllCombinations() {
+            const combinations = [];
+            for (let i = 0; i < Math.pow(ELEMENTS.length, SEQUENCE_LENGTH); i++) {
+                const combo = [];
+                let num = i;
+                for (let j = 0; j < SEQUENCE_LENGTH; j++) {
+                    combo.push(ELEMENTS[num % ELEMENTS.length]);
+                    num = Math.floor(num / ELEMENTS.length);
+                }
+                combinations.push(combo);
+            }
+            return combinations;
+        }
 
-    </div>
+        function calculateFeedback(guess, secret) {
+            let whiteCircles = 0;
+            let blackCircles = 0;
 
-    <button id="addAttempt">
-        Agregar intento
-    </button>
+            const secretRemaining = [];
+            const guessRemaining = [];
 
-    <button id="reset">
-        Reiniciar
-    </button>
+            // Contar círculos blancos
+            for (let i = 0; i < guess.length; i++) {
+                if (guess[i] === secret[i]) {
+                    whiteCircles++;
+                } else {
+                    secretRemaining.push(secret[i]);
+                    guessRemaining.push(guess[i]);
+                }
+            }
 
-    <hr>
+            // Contar círculos negros
+            for (let element of guessRemaining) {
+                const index = secretRemaining.indexOf(element);
+                if (index !== -1) {
+                    blackCircles++;
+                    secretRemaining.splice(index, 1);
+                }
+            }
 
-    <h2>Historial</h2>
+            return { white: whiteCircles, black: blackCircles };
+        }
 
-    <table id="history">
+        function getNextGuess() {
+            if (solver.possibleCombinations.length === 1) {
+                return solver.possibleCombinations[0];
+            }
 
-        <thead>
+            if (solver.attempts.length === 0) {
+                return ['Aire', 'Aire', 'Tierra', 'Tierra'];
+            }
 
-        <tr>
-            <th>#</th>
-            <th>Intento</th>
-            <th>⚪</th>
-            <th>⚫</th>
-        </tr>
+            let bestGuess = solver.possibleCombinations[0];
+            let bestScore = Infinity;
 
-        </thead>
+            for (let guess of solver.possibleCombinations.slice(0, 50)) {
+                const scores = {};
 
-        <tbody>
+                for (let combo of solver.possibleCombinations) {
+                    const feedback = calculateFeedback(guess, combo);
+                    const key = `${feedback.white},${feedback.black}`;
+                    scores[key] = (scores[key] || 0) + 1;
+                }
 
-        </tbody>
+                const maxScore = Math.max(...Object.values(scores));
+                if (maxScore < bestScore) {
+                    bestScore = maxScore;
+                    bestGuess = guess;
+                }
+            }
 
-    </table>
+            return bestGuess;
+        }
 
-    <hr>
+        function displayGuess(guess) {
+            const guessDisplay = document.getElementById('guessDisplay');
+            guessDisplay.innerHTML = '';
+            guess.forEach(element => {
+                const div = document.createElement('div');
+                div.className = `guess-item ${element.toLowerCase()}`;
+                div.textContent = element;
+                guessDisplay.appendChild(div);
+            });
+        }
 
-    <h2>Posibilidades restantes</h2>
+        function displayFeedback(white, black) {
+            const feedbackDisplay = document.getElementById('feedbackDisplay');
+            feedbackDisplay.innerHTML = '';
 
-    <p id="remaining">
-        256
-    </p>
+            for (let i = 0; i < white; i++) {
+                const circle = document.createElement('div');
+                circle.className = 'circle white';
+                feedbackDisplay.appendChild(circle);
+            }
 
-    <div id="solutions">
+            for (let i = 0; i < black; i++) {
+                const circle = document.createElement('div');
+                circle.className = 'circle black';
+                feedbackDisplay.appendChild(circle);
+            }
+        }
 
-    </div>
+        function updateCombinationCount() {
+            document.getElementById('combinationCount').textContent = 
+                solver.possibleCombinations.length;
+        }
 
-</div>
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+            setTimeout(() => {
+                statusEl.className = 'status-message';
+            }, 5000);
+        }
 
-<script src="script.js"></script>
+        function nextGuess() {
+            const guess = getNextGuess();
+            solver.currentGuess = guess;
+            displayGuess(guess);
 
+            const whiteInput = document.getElementById('whiteCircles');
+            const blackInput = document.getElementById('blackCircles');
+            whiteInput.value = 0;
+            blackInput.value = 0;
+            displayFeedback(0, 0);
+
+            showStatus(`Intento ${solver.attempts.length + 1}: Ingresa el feedback`, 'info');
+        }
+
+        function submitFeedback() {
+            if (!solver.currentGuess) {
+                showStatus('Primero obtén un intento', 'error');
+                return;
+            }
+
+            const white = parseInt(document.getElementById('whiteCircles').value);
+            const black = parseInt(document.getElementById('blackCircles').value);
+
+            if (isNaN(white) || isNaN(black) || white < 0 || black < 0 || white + black > 4) {
+                showStatus('Feedback inválido', 'error');
+                return;
+            }
+
+            solver.attempts.push(solver.currentGuess);
+            solver.feedbackHistory.push({ white, black });
+
+            addAttemptToLog(solver.currentGuess, white, black);
+
+            if (white === 4) {
+                showStatus(`🎉 ¡CÓDIGO ENCONTRADO! ${solver.currentGuess.join(' → ')}`, 'success');
+                document.querySelector('.btn-primary').disabled = true;
+                return;
+            }
+
+            // Filtrar combinaciones
+            const newPossible = [];
+            for (let combo of solver.possibleCombinations) {
+                const feedback = calculateFeedback(solver.currentGuess, combo);
+                if (feedback.white === white && feedback.black === black) {
+                    newPossible.push(combo);
+                }
+            }
+
+            solver.possibleCombinations = newPossible;
+            updateCombinationCount();
+
+            if (solver.possibleCombinations.length === 0) {
+                showStatus('Error: No hay combinaciones posibles', 'error');
+            } else {
+                showStatus(`Combinaciones restantes: ${solver.possibleCombinations.length}`, 'info');
+                nextGuess();
+            }
+        }
+
+        function addAttemptToLog(guess, white, black) {
+            const log = document.getElementById('attemptsLog');
+            if (log.innerHTML.includes('Aquí aparecerán')) {
+                log.innerHTML = '';
+            }
+
+            const item = document.createElement('div');
+            item.className = 'attempt-item';
+            item.innerHTML = `
+                <strong>Intento ${solver.attempts.length}:</strong> ${guess.join(' → ')}<br>
+                ⚪ ${white} | ⚫ ${black}
+            `;
+            log.appendChild(item);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function resetSolver() {
+            solver = {
+                possibleCombinations: generateAllCombinations(),
+                attempts: [],
+                feedbackHistory: [],
+                currentGuess: null
+            };
+
+            document.getElementById('attemptsLog').innerHTML = 
+                '<p style="color: #999; text-align: center;">Aquí aparecerán tus intentos...</p>';
+            document.getElementById('whiteCircles').value = 0;
+            document.getElementById('blackCircles').value = 0;
+            document.getElementById('statusMessage').className = 'status-message';
+            document.querySelector('.btn-primary').disabled = false;
+            
+            displayGuess(['-', '-', '-', '-']);
+            displayFeedback(0, 0);
+            updateCombinationCount();
+            showStatus('Reiniciado. Haz clic en "Obtener Siguiente Intento"', 'info');
+        }
+
+        // Inicializar
+        window.addEventListener('load', () => {
+            displayGuess(['-', '-', '-', '-']);
+            displayFeedback(0, 0);
+            showStatus('¡Bienvenido! Haz clic en "Obtener Siguiente Intento"', 'info');
+        });
+    </script>
 </body>
 </html>
