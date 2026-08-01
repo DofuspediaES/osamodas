@@ -1,99 +1,36 @@
-body {
-    background-color: #121212;
-    color: #e0e0e0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-}
-.container {
-    background: #1e1e1e;
-    max-width: 400px;
-    width: 100%;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    text-align: center;
-}
-h1 { color: #ffcc00; font-size: 1.5rem; }
-.instruction { font-size: 0.9rem; color: #aaa; margin-bottom: 20px; }
-.grid-inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-.card {
-    padding: 10px;
-    border-radius: 8px;
-    background: #2b2b2b;
-    display: flex;
-    flex-direction: column;
-}
-.card label { font-size: 0.8rem; margin-bottom: 5px; font-weight: bold; }
-input {
-    background: #000;
-    border: 1px solid #444;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
-    font-size: 1.2rem;
-    border-radius: 5px;
-}
-button {
-    background: #ffcc00;
-    color: #000;
-    border: none;
-    padding: 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1rem;
-}
-button:hover { background: #e6b800; }
+body { background: #121212; color: #eee; font-family: sans-serif; display: flex; justify-content: center; padding: 10px; }
+.container { background: #1e1e1e; padding: 20px; border-radius: 15px; max-width: 400px; width: 100%; text-align: center; }
+.grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.card { background: #2a2a2a; padding: 10px; border-radius: 8px; display: flex; flex-direction: column; }
+input { background: #000; border: 1px solid #444; color: #fff; padding: 8px; font-size: 1.2rem; text-align: center; }
+button { background: #ffcc00; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+
 .hidden { display: none; }
-.error { color: #ff5555; font-size: 0.8rem; height: 1.2rem; }
-.pill-container {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin: 20px 0;
-}
-.pill {
-    padding: 10px 5px;
-    border-radius: 5px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    width: 70px;
-    text-transform: uppercase;
-    color: white;
-}
+
+/* Estilos de los Slots en Parte 2 */
+#solver-ui { display: flex; justify-content: space-between; margin-top: 20px; gap: 5px; }
+.slot-container { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; }
+
+.pill { padding: 8px 2px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; width: 100%; color: white; text-transform: uppercase; }
 .pill-tierra { background: #795548; }
 .pill-fuego { background: #d32f2f; }
 .pill-agua { background: #1976d2; }
 .pill-aire { background: #689f38; }
 
-.feedback-box {
-    background: #252525;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 10px;
+.circle-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid #444;
+    cursor: pointer;
+    background: #111;
+    transition: 0.2s;
 }
-.feedback-inputs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-.f-field { flex: 1; display: flex; flex-direction: column; }
-.f-field label { font-size: 0.75rem; margin-bottom: 5px; }
-.info-bar {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #444;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.btn-reset { width: auto; background: #444; color: #fff; padding: 5px 10px; font-size: 0.8rem; }
+
+/* Estados del círculo */
+.circle-btn[data-state="white"] { background: white; border-color: #ccc; }
+.circle-btn[data-state="black"] { background: #333; border-color: #000; }
+.circle-btn[data-state="none"] { background: transparent; border-color: #444; }
+
+.info-bar { margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #444; padding-top: 10px; }
+.btn-reset { width: auto; background: #444; color: white; padding: 5px 10px; }
