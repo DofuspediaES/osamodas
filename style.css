@@ -11,7 +11,7 @@
 body {
     background-color: var(--bg-color);
     color: #eee;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: sans-serif;
     display: flex;
     justify-content: center;
     padding: 10px;
@@ -20,100 +20,60 @@ body {
 
 .container {
     background: var(--card-color);
-    padding: 25px;
-    border-radius: 20px;
-    max-width: 450px;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 420px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
     border: 1px solid #333;
 }
 
-h1 {
-    font-size: 1.4rem;
-    color: var(--accent);
-    margin-bottom: 20px;
-    text-transform: uppercase;
-}
+h1 { font-size: 1.2rem; color: var(--accent); margin-bottom: 10px; }
 
 /* Imagen del Monstruo */
-.monster-container {
-    margin-bottom: 20px;
-    background: radial-gradient(circle, #333 0%, transparent 70%);
-    padding: 10px;
-}
-.monster-img {
-    width: 120px;
-    filter: drop-shadow(0 0 10px var(--accent));
-}
+.monster-container { margin-bottom: 15px; }
+.monster-img { width: 100px; filter: drop-shadow(0 0 8px var(--accent)); }
 
-.instruction {
-    font-size: 0.9rem;
-    color: #bbb;
-    margin-bottom: 20px;
-}
+.instruction { font-size: 0.85rem; color: #bbb; margin-bottom: 15px; }
 
-/* Diseño Parte 1: Fondos de colores */
+/* Parte 1 */
 .grid-elements {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 20px;
 }
-
 .card-element {
     padding: 15px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 2px solid rgba(255,255,255,0.1);
-}
-
-.card-element label {
-    font-weight: bold;
-    font-size: 0.8rem;
-    margin-bottom: 8px;
     color: white;
+    font-weight: bold;
 }
-
-.tierra { background-color: var(--tierra); }
-.fuego { background-color: var(--fuego); }
-.agua { background-color: var(--agua); }
-.aire { background-color: var(--aire); }
+.tierra { background: var(--tierra); }
+.fuego { background: var(--fuego); }
+.agua { background: var(--agua); }
+.aire { background: var(--aire); }
 
 .card-element input {
-    width: 60px;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid white;
-    color: white;
-    font-size: 1.4rem;
-    text-align: center;
-    border-radius: 5px;
+    width: 50px; background: rgba(0,0,0,0.4); border: 1px solid white;
+    color: white; font-size: 1.2rem; text-align: center; margin-top: 5px;
 }
 
-/* Botones */
 .btn-main {
-    background: var(--accent);
-    color: #000;
-    border: none;
-    padding: 18px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    transition: 0.3s;
+    background: var(--accent); border: none; padding: 15px;
+    border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;
 }
 
-.btn-main:hover { background: #ffd633; transform: translateY(-2px); }
-
-/* Slots Parte 2 */
+/* Parte 2 - Cuadrícula del Solucionador */
 #solver-grid {
     display: flex;
     justify-content: space-between;
-    gap: 8px;
-    margin: 25px 0;
+    gap: 5px;
+    margin: 20px 0;
+    min-height: 100px; /* Asegura que el contenedor tenga espacio */
 }
 
 .slot {
@@ -121,52 +81,37 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .pill {
-    padding: 10px 0;
-    border-radius: 6px;
-    font-size: 0.7rem;
+    padding: 8px 0;
+    border-radius: 4px;
+    font-size: 0.65rem;
     font-weight: bold;
     width: 100%;
     color: white;
     text-transform: uppercase;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
 }
-
 .pill-tierra { background: var(--tierra); }
 .pill-fuego { background: var(--fuego); }
 .pill-agua { background: var(--agua); }
 .pill-aire { background: var(--aire); }
 
-/* Círculos de alto contraste */
+/* Círculos con alto contraste */
 .circle-btn {
-    width: 52px;
-    height: 52px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
-    border: 4px solid #444;
-    cursor: pointer;
+    border: 3px solid #555;
     background: #111;
-    transition: 0.2s;
+    cursor: pointer;
 }
+.circle-btn[data-state="white"] { background: white !important; border: 4px solid #000 !important; box-shadow: 0 0 10px white; }
+.circle-btn[data-state="black"] { background: black !important; border: 4px solid white !important; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-.circle-btn[data-state="white"] {
-    background: #ffffff !important;
-    border: 6px solid #000 !important;
-    box-shadow: 0 0 15px #fff;
-}
-
-.circle-btn[data-state="black"] {
-    background: #000000 !important;
-    border: 6px solid #ffffff !important;
-    box-shadow: 0 0 15px rgba(255,255,255,0.8);
-}
-
-/* Otros */
-.warning-panel { background: #b71c1c; padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 0.85rem; border: 2px solid white; }
-.success-text { color: #00ff00; font-size: 1.8rem; text-shadow: 0 0 10px #00ff00; }
-.pill-container { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
-.footer { margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 20px; }
-.btn-reset { background: #444; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
 .hidden { display: none; }
+.success-text { color: #00ff00; }
+.footer { margin-top: 20px; display: flex; justify-content: space-between; border-top: 1px solid #444; padding-top: 10px; }
+.btn-reset { background: #444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+.warning-panel { background: #600; color: white; padding: 10px; border-radius: 5px; margin-top: 10px; font-size: 0.8rem; }
