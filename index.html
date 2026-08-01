@@ -3,45 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osamodas Solver - Final Pro</title>
+    <title>Mecanica de Invocación de Osamodas</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Osa Solver</h1>
-
-        <section id="part1">
-            <p class="instruction">1. Pon las cantidades del Paso 1 (Suma 4):</p>
-            <div class="grid-inputs">
-                <div class="card t"><label>🪨 Tierra</label><input type="number" id="in-tierra" value="0"></div>
-                <div class="card f"><label>🔥 Fuego</label><input type="number" id="in-fuego" value="0"></div>
-                <div class="card w"><label>💧 Agua</label><input type="number" id="in-agua" value="0"></div>
-                <div class="card a"><label>💨 Aire</label><input type="number" id="in-aire" value="0"></div>
+        <header>
+            <h1>Mecanica de Invocación de Osamodas</h1>
+            <!-- Imagen del monstruo. Puedes cambiar el 'src' por una URL local si descargas la imagen -->
+            <div class="monster-container">
+                <img src="https://api.dofusdb.fr/img/monsters/4977.png" alt="Invocación de Osamodas" class="monster-img">
             </div>
-            <button id="btn-start">GENERAR</button>
+        </header>
+
+        <!-- PARTE 1 -->
+        <section id="part1">
+            <p class="instruction">Paso 1: Lanza 4 veces cada hechizo y anota los blancos totales:</p>
+            <div class="grid-elements">
+                <div class="card-element tierra">
+                    <label>TIERRA</label>
+                    <input type="number" id="in-tierra" value="0" min="0" max="4">
+                </div>
+                <div class="card-element fuego">
+                    <label>FUEGO</label>
+                    <input type="number" id="in-fuego" value="0" min="0" max="4">
+                </div>
+                <div class="card-element agua">
+                    <label>AGUA</label>
+                    <input type="number" id="in-agua" value="0" min="0" max="4">
+                </div>
+                <div class="card-element aire">
+                    <label>AIRE</label>
+                    <input type="number" id="in-aire" value="0" min="0" max="4">
+                </div>
+            </div>
+            <button id="btn-start" class="btn-main">GENERAR POSIBILIDADES</button>
         </section>
 
+        <!-- PARTE 2 -->
         <section id="part2" class="hidden">
-            <div id="solver-view">
-                <p class="instruction">Prueba este orden y marca los círculos:</p>
-                <div id="solver-grid"></div>
-                <button id="btn-filter">FILTRAR PATRÓN</button>
-                
-                <div class="debug-area">
-                    <p>Opciones restantes:</p>
-                    <div id="possible-list"></div>
-                </div>
+            <p class="instruction">Paso 2: Lanza este orden y marca los círculos exactos:</p>
+            <div id="solver-grid"></div>
+            <button id="btn-filter" class="btn-main">FILTRAR PATRÓN</button>
+
+            <div id="msg-warning" class="warning-panel hidden">
+                ⚠️ Error detectado. Buscando solución entre todas las combinaciones...
             </div>
 
             <div id="solution-view" class="hidden">
-                <h2 class="success-text">¡SOLUCIÓN!</h2>
+                <h2 class="success-text">¡SOLUCIÓN FINAL!</h2>
                 <div id="final-pills" class="pill-container"></div>
-                <button onclick="location.reload()" class="btn-reset">Reiniciar</button>
+                <p class="instruction">Lanza estos elementos para ganar.</p>
             </div>
 
             <div class="footer">
-                <span>Restantes: <strong id="count-text">0</strong></span>
-                <button class="btn-reset-small" onclick="location.reload()">Reset</button>
+                <span>Posibilidades: <strong id="count-text">0</strong></span>
+                <button class="btn-reset" onclick="location.reload()">REINICIAR</button>
             </div>
         </section>
     </div>
