@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnStart = document.getElementById('btn-start');
     const btnFilter = document.getElementById('btn-filter');
-    const errorMsg = document.getElementById('error-msg');
     const circleBtns = document.querySelectorAll('.circle-btn');
 
     // Cambiar estado visual: Nada -> Blanco -> Negro
@@ -23,11 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const a = parseInt(document.getElementById('in-aire').value) || 0;
 
         if (t + f + w + a !== 4) {
-            errorMsg.textContent = "La suma de elementos debe ser 4.";
+            alert("La suma de elementos debe ser exactamente 4.");
             return;
         }
 
-        errorMsg.textContent = "";
         let base = [];
         for(let i=0; i<t; i++) base.push("tierra");
         for(let i=0; i<f; i++) base.push("fuego");
@@ -44,16 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
     btnFilter.addEventListener('click', () => {
         const userPattern = Array.from(circleBtns).map(b => b.dataset.state);
         
-        // Filtramos las combinaciones que producirían EXACTAMENTE ese patrón de colores
-        possibilities = possibilities.filter(candidate => {
+        // Filtrado Posicional Estricto
+        const newPossibilities = possibilities.filter(candidate => {
             const simulatedPattern = getDofusPattern(currentGuess, candidate);
             return JSON.stringify(simulatedPattern) === JSON.stringify(userPattern);
         });
 
-        if (possibilities.length === 0) {
-            alert("No hay combinaciones que coincidan. Revisa si contaste bien al principio.");
-            location.reload();
+        if (newPossibilities.length === 0) {
+            alert("⚠️ Error: No hay combinaciones. \n\nExplicación: Con los elementos que pusiste al principio, es imposible obtener ese patrón de círculos. \n\nEjemplo: Si tienes 2 Fuego y 2 Aire, nunca podrás obtener 1 Blanco y 3 Negros.");
         } else {
+            possibilities = newPossibilities;
             updateGuessUI();
         }
     });
@@ -62,38 +60,48 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('count-text').textContent = possibilities.length;
         
         if (possibilities.length === 1) {
-            currentGuess = possibilities[0];
-            document.getElementById('success-msg').classList.remove('hidden');
-            document.getElementById('btn-filter').classList.add('hidden');
+            // MOSTRAR SOLUCIÓN FINAL
+            document.getElementById('solver-view').classList.add('hidden');
+            const solutionDiv = document.getElementById('solution-found');
+            solutionDiv.classList.remove('hidden');
+            renderPills(possibilities[0], 'final-pills');
         } else {
             currentGuess = possibilities[0];
-        }
-
-        for (let i = 0; i < 4; i++) {
-            const slot = document.getElementById(`slot-${i}`);
-            const pill = slot.querySelector('.pill');
-            const btn = slot.querySelector('.circle-btn');
-            
-            pill.textContent = currentGuess[i];
-            pill.className = `pill pill-${currentGuess[i]}`;
-            btn.dataset.state = 'none'; 
+            for (let i = 0; i < 4; i++) {
+                const slot = document.getElementById(`slot-${i}`);
+                const pill = slot.querySelector('.pill');
+                const btn = slot.querySelector('.circle-btn');
+                pill.textContent = currentGuess[i];
+                pill.className = `pill pill-${currentGuess[i]}`;
+                btn.dataset.state = 'none'; 
+            }
         }
     }
 
-    // Lógica POSICIONAL de Dofus
+    function renderPills(arr, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+        arr.forEach(el => {
+            const div = document.createElement('div');
+            div.className = `pill pill-${el}`;
+            div.style.width = "75px";
+            div.style.padding = "10px";
+            div.textContent = el;
+            container.appendChild(div);
+        });
+    }
+
     function getDofusPattern(guess, solution) {
         let pattern = ['none', 'none', 'none', 'none'];
         let g = [...guess];
         let s = [...solution];
 
-        // 1. Marcar Blancos (Posición exacta)
         for (let i = 0; i < 4; i++) {
             if (g[i] === s[i]) {
                 pattern[i] = 'white';
                 g[i] = s[i] = null;
             }
         }
-        // 2. Marcar Negros (Existe en otro hueco)
         for (let i = 0; i < 4; i++) {
             if (g[i] !== null) {
                 let idx = s.indexOf(g[i]);
