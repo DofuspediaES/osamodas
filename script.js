@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     let possibilities = [];
+    let attemptHistory = [];
     let currentGuess = [];
 
     const btnStart = document.getElementById('btn-start');
     const btnFilter = document.getElementById('btn-filter');
+    const solverGrid = document.getElementById('solver-grid');
 
     btnStart.addEventListener('click', () => {
         const counts = {
@@ -14,43 +16,53 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         if (counts.tierra + counts.fuego + counts.agua + counts.aire !== 4) {
-            alert("La suma debe ser 4"); return;
+            alert("La suma debe ser exactamente 4 elementos.");
+            return;
         }
 
         let base = [];
-        for (let el in counts) for (let i = 0; i < counts[el]; i++) base.push(el);
-        
+        for (let el in counts) {
+            for (let i = 0; i < counts[el]; i++) base.push(el);
+        }
+
         possibilities = generateUniquePerms(base);
+        
         document.getElementById('part1').classList.add('hidden');
         document.getElementById('part2').classList.remove('hidden');
-        updateUI();
+        
+        updateUI(); // Esto llamará a renderGrid
     });
 
     btnFilter.addEventListener('click', () => {
         const circles = document.querySelectorAll('.circle-btn');
         const pattern = Array.from(circles).map(c => c.dataset.state);
 
-        const nextPoss = possibilities.filter(candidate => {
-            return JSON.stringify(getPattern(currentGuess, candidate)) === JSON.stringify(pattern);
+        attemptHistory.push({ guess: currentGuess, pattern: pattern });
+
+        let nextPoss = possibilities.filter(candidate => {
+            return JSON.stringify(getDofusPattern(currentGuess, candidate)) === JSON.stringify(pattern);
         });
 
         if (nextPoss.length === 0) {
-            alert("⚠️ ERROR LÓGICO: Esa pista contradice los elementos que pusiste al principio o una pista anterior.");
+            document.getElementById('msg-warning').classList.remove('hidden');
+            const allCombs = generateAll256();
+            possibilities = allCombs.filter(candidate => {
+                return attemptHistory.every(h => JSON.stringify(getDofusPattern(h.guess, candidate)) === JSON.stringify(h.pattern));
+            });
         } else {
             possibilities = nextPoss;
-            updateUI();
         }
+
+        updateUI();
     });
 
     function updateUI() {
         document.getElementById('count-text').textContent = possibilities.length;
-        const listDiv = document.getElementById('possible-list');
-        listDiv.innerHTML = possibilities.map(p => p.join(' - ')).join('<br>');
-
+        
         if (possibilities.length === 1) {
             document.getElementById('solver-view').classList.add('hidden');
             document.getElementById('solution-view').classList.remove('hidden');
-            renderPills(possibilities[0], 'final-pills');
+            renderFinalPills(possibilities[0], 'final-pills');
         } else {
             currentGuess = possibilities[0];
             renderGrid(currentGuess);
@@ -58,58 +70,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderGrid(guess) {
-        const grid = document.getElementById('solver-grid');
-        grid.innerHTML = "";
-        guess.forEach(el => {
+        solverGrid.innerHTML = ""; // Limpiar
+        guess.forEach((el, index) => {
             const slot = document.createElement('div');
             slot.className = 'slot';
-            slot.innerHTML = `<div class="pill pill-${el}">${el}</div><div class="circle-btn" data-state="none"></div>`;
+            slot.innerHTML = `
+                <div class="pill pill-${el}">${el}</div>
+                <div class="circle-btn" data-state="none" id="circle-${index}"></div>
+            `;
+            // Añadir evento de clic al círculo recién creado
             const btn = slot.querySelector('.circle-btn');
-            btn.onclick = () => {
+            btn.addEventListener('click', function() {
                 const states = ['none', 'white', 'black'];
-                btn.dataset.state = states[(states.indexOf(btn.dataset.state) + 1) % 3];
-            };
-            grid.appendChild(slot);
+                let current = states.indexOf(this.dataset.state);
+                this.dataset.state = states[(current + 1) % 3];
+            });
+            solverGrid.appendChild(slot);
         });
     }
 
-    function getPattern(guess, solution) {
-        let res = ['none', 'none', 'none', 'none'];
+    function getDofusPattern(guess, solution) {
+        let pattern = ['none', 'none', 'none', 'none'];
         let g = [...guess], s = [...solution];
         for (let i = 0; i < 4; i++) {
-            if (g[i] === s[i]) { res[i] = 'white'; g[i] = s[i] = null; }
+            if (g[i] === s[i]) { pattern[i] = 'white'; g[i] = s[i] = null; }
         }
         for (let i = 0; i < 4; i++) {
             if (g[i] !== null) {
                 let idx = s.indexOf(g[i]);
-                if (idx !== -1) { res[i] = 'black'; s[idx] = null; }
+                if (idx !== -1) { pattern[i] = 'black'; s[idx] = null; }
             }
         }
-        return res;
+        return pattern;
     }
 
     function generateUniquePerms(arr) {
-        let results = [];
-        const permute = (current, remaining) => {
-            if (remaining.length === 0) { results.push(current); return; }
+        let res = [];
+        const p = (c, r) => {
+            if (r.length === 0) { res.push(c); return; }
             let seen = new Set();
-            for (let i = 0; i < remaining.length; i++) {
-                if (seen.has(remaining[i])) continue;
-                seen.add(remaining[i]);
-                permute([...current, remaining[i]], [...remaining.slice(0, i), ...remaining.slice(i + 1)]);
+            for (let i = 0; i < r.length; i++) {
+                if (seen.has(r[i])) continue;
+                seen.add(r[i]);
+                p([...c, r[i]], [...r.slice(0, i), ...r.slice(i+1)]);
             }
         };
-        permute([], arr);
-        return results;
+        p([], arr);
+        return res;
     }
 
-    function renderPills(arr, id) {
-        const container = document.getElementById(id);
+    function generateAll256() {
+        const els = ['tierra', 'fuego', 'agua', 'aire'];
+        let res = [];
+        for(let a of els) for(let b of els) for(let c of els) for(let d of els) res.push([a,b,c,d]);
+        return res;
+    }
+
+    function renderFinalPills(arr, containerId) {
+        const container = document.getElementById(containerId);
         container.innerHTML = "";
         arr.forEach(el => {
             const div = document.createElement('div');
             div.className = `pill pill-${el}`;
-            div.style.width = "80px"; div.textContent = el;
+            div.style.width = "80px";
+            div.style.margin = "0 5px";
+            div.textContent = el;
             container.appendChild(div);
         });
     }
