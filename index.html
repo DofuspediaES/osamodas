@@ -10,8 +10,8 @@
     <div class="container">
         <header>
             <h1>Mecanica de Invocación de Osamodas</h1>
-            <!-- Imagen del monstruo. Puedes cambiar el 'src' por una URL local si descargas la imagen -->
             <div class="monster-container">
+                <!-- Asegúrate de que el nombre del archivo sea exacto (puedes renombrarlo a osa.png para evitar espacios) -->
                 <img src="Invocación de Osamodas.png" alt="Invocación de Osamodas" class="monster-img">
             </div>
         </header>
@@ -42,9 +42,13 @@
 
         <!-- PARTE 2 -->
         <section id="part2" class="hidden">
-            <p class="instruction">Paso 2: Lanza este orden y marca los círculos exactos:</p>
-            <div id="solver-grid"></div>
-            <button id="btn-filter" class="btn-main">FILTRAR PATRÓN</button>
+            <div id="solver-view">
+                <p class="instruction">Paso 2: Lanza este orden y marca los círculos exactos:</p>
+                <!-- Aquí es donde el JS inyectará los elementos y círculos -->
+                <div id="solver-grid"></div>
+                
+                <button id="btn-filter" class="btn-main">FILTRAR PATRÓN</button>
+            </div>
 
             <div id="msg-warning" class="warning-panel hidden">
                 ⚠️ Error detectado. Buscando solución entre todas las combinaciones...
