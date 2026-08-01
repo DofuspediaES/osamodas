@@ -621,23 +621,28 @@
             let whiteCircles = 0;
             let blackCircles = 0;
 
-            const secretRemaining = [];
-            const guessRemaining = [];
+            const guessUsed = [false, false, false, false];
+            const secretUsed = [false, false, false, false];
 
-            for (let i = 0; i < guess.length; i++) {
+            // Primero contar blancos (posición correcta)
+            for (let i = 0; i < 4; i++) {
                 if (guess[i] === secret[i]) {
                     whiteCircles++;
-                } else {
-                    secretRemaining.push(secret[i]);
-                    guessRemaining.push(guess[i]);
+                    guessUsed[i] = true;
+                    secretUsed[i] = true;
                 }
             }
 
-            for (let element of guessRemaining) {
-                const index = secretRemaining.indexOf(element);
-                if (index !== -1) {
-                    blackCircles++;
-                    secretRemaining.splice(index, 1);
+            // Luego contar negros (elemento correcto, posición incorrecta)
+            for (let i = 0; i < 4; i++) {
+                if (!guessUsed[i]) {
+                    for (let j = 0; j < 4; j++) {
+                        if (!secretUsed[j] && guess[i] === secret[j]) {
+                            blackCircles++;
+                            secretUsed[j] = true;
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -652,12 +657,6 @@
 
             const whiteCount = solver.currentFeedback.filter(f => f === 'white').length;
             const blackCount = solver.currentFeedback.filter(f => f === 'black').length;
-
-            // Validar que no haya más de 4 coincidencias
-            if (whiteCount + blackCount > 4) {
-                showStatus('Máximo 4 circulos totales', 'error');
-                return;
-            }
 
             solver.attempts.push([...solver.currentSelection]);
             solver.feedbackHistory.push({ white: whiteCount, black: blackCount });
@@ -680,21 +679,22 @@
             solver.possibleCombinations = newPossible;
 
             if (solver.possibleCombinations.length === 0) {
-                showStatus('❌ Error en el feedback', 'error');
-            } else {
-                addToHistory(solver.currentSelection, whiteCount, blackCount);
-                
-                if (solver.possibleCombinations.length === 1) {
-                    solver.currentSuggestion = solver.possibleCombinations[0];
-                } else {
-                    solver.currentSuggestion = getNextGuess();
-                }
-                
-                updateSuggestion();
-                clearForNextAttempt();
-                updateStats();
-                showStatus(`✓ ${solver.possibleCombinations.length} posibilidades restantes`, 'success');
+                showStatus('❌ Error en el feedback - Verifica tus círculos', 'error');
+                return;
             }
+
+            addToHistory(solver.currentSelection, whiteCount, blackCount);
+            
+            if (solver.possibleCombinations.length === 1) {
+                solver.currentSuggestion = solver.possibleCombinations[0];
+            } else {
+                solver.currentSuggestion = getNextGuess();
+            }
+            
+            updateSuggestion();
+            clearForNextAttempt();
+            updateStats();
+            showStatus(`✓ ${solver.possibleCombinations.length} posibilidades restantes`, 'success');
         }
 
         function getNextGuess() {
