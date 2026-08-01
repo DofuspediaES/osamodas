@@ -3,69 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osamodas Mastermind Solver - Dofus</title>
+    <title>Osamodas Solver</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Osa Mastermind Solver</h1>
+        <h1>Osa Solver</h1>
         
-        <!-- Parte 1: Configuración de Elementos -->
+        <!-- PARTE 1 -->
         <section id="part1">
-            <h2>Paso 1: Cantidad de Elementos</h2>
-            <p>Lanza 4 veces cada hechizo para saber cuántos hay de cada uno.</p>
-            <div class="input-group">
+            <p>Introduce cuántos hay de cada elemento (total 4):</p>
+            <div class="input-grid">
                 <div class="field">
-                    <label class="icon-terra">🪨 Tierra:</label>
-                    <input type="number" id="count-terra" min="0" max="4" value="0">
+                    <label>🪨 Tierra</label>
+                    <input type="number" id="count-terra" value="0" min="0" max="4">
                 </div>
                 <div class="field">
-                    <label class="icon-fire">🔥 Fuego:</label>
-                    <input type="number" id="count-fire" min="0" max="4" value="0">
+                    <label>🔥 Fuego</label>
+                    <input type="number" id="count-fire" value="0" min="0" max="4">
                 </div>
                 <div class="field">
-                    <label class="icon-water">💧 Agua:</label>
-                    <input type="number" id="count-water" min="0" max="4" value="0">
+                    <label>💧 Agua</label>
+                    <input type="number" id="count-water" value="0" min="0" max="4">
                 </div>
                 <div class="field">
-                    <label class="icon-air">💨 Aire:</label>
-                    <input type="number" id="count-air" min="0" max="4" value="0">
+                    <label>💨 Aire</label>
+                    <input type="number" id="count-air" value="0" min="0" max="4">
                 </div>
             </div>
             <p id="error-msg" class="error"></p>
-            <button id="btn-generate">Generar Combinaciones</button>
+            <button id="btn-generate">GENERAR COMBINACIONES</button>
         </section>
 
-        <!-- Parte 2: El Solucionador -->
+        <!-- PARTE 2 -->
         <section id="part2" class="hidden">
-            <h2>Paso 2: Encontrar la Solución</h2>
-            <div id="guess-container">
-                <p>Prueba esta combinación en el juego:</p>
-                <div id="current-guess" class="combination-display"></div>
+            <div id="guess-area">
+                <p>Prueba esta combinación:</p>
+                <div id="current-guess" class="display-box"></div>
                 
-                <div class="feedback-inputs">
+                <div class="feedback-row">
                     <div class="field">
-                        <label>⚪ Blancos (Bien puestos):</label>
-                        <input type="number" id="feedback-white" min="0" max="4" value="0">
+                        <label>⚪ Blancos</label>
+                        <input type="number" id="f-white" value="0" min="0" max="4">
                     </div>
                     <div class="field">
-                        <label>⚫ Negros (Mal puestos):</label>
-                        <input type="number" id="feedback-black" min="0" max="4" value="0">
+                        <label>⚫ Negros</label>
+                        <input type="number" id="f-black" value="0" min="0" max="4">
                     </div>
                 </div>
-                <button id="btn-filter">Filtrar y Siguiente</button>
+                <button id="btn-filter">FILTRAR RESULTADOS</button>
+            </div>
+
+            <div id="result-area" class="hidden">
+                <h2 class="success">¡SOLUCIÓN!</h2>
+                <div id="final-solution" class="display-box"></div>
+                <button onclick="location.reload()">REINICIAR</button>
             </div>
             
-            <div id="stats">
-                <p>Posibilidades restantes: <span id="remaining-count">0</span></p>
-            </div>
-
-            <div id="solution-found" class="hidden">
-                <h3 class="success">¡Solución Encontrada!</h3>
-                <div id="final-solution" class="combination-display"></div>
-            </div>
-
-            <button class="btn-secondary" onclick="location.reload()">Reiniciar</button>
+            <p class="status">Restantes: <span id="count-rem">?</span></p>
         </section>
     </div>
     <script src="script.js"></script>
