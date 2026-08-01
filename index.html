@@ -1,97 +1,219 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Osamodas Mastermind Solver</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
+<div class="contenedor">
+
 <h1>🦉 Osamodas Mastermind Solver</h1>
 
-<h2>Parte 1 - Descubrir elementos</h2>
-
-<p>
-Primero usa 4 veces el mismo hechizo en Dofus.
-Introduce los círculos obtenidos.
+<p class="descripcion">
+Descubre la combinación correcta del minijuego de Osamodas utilizando la lógica de Mastermind.
 </p>
-
-
-<div class="grid">
-
-<div class="card fuego">
-<h3>🔥 Fuego x4</h3>
-Blancos:
-<input id="F_b" type="number" min="0" max="4">
-
-
-<div class="card aire">
-<h3>🌪 Aire x4</h3>
-Blancos:
-<input id="A_b" type="number" min="0" max="4">
-
-
-<div class="card agua">
-<h3>💧 Agua x4</h3>
-Blancos:
-<input id="W_b" type="number" min="0" max="4">
-
-
-<div class="card tierra">
-<h3>🌍 Tierra x4</h3>
-Blancos:
-<input id="T_b" type="number" min="0" max="4">
-
-</div>
-
-
-<button onclick="crearSolver()">
-Generar combinaciones
-</button>
-
 
 <hr>
 
+<h2>PARTE 1</h2>
 
-<h2>Parte 2 - Resolver posición</h2>
+<p class="texto">
+Usa cuatro veces cada elemento en el juego e introduce únicamente la cantidad de círculos blancos obtenidos.
+</p>
 
+<div class="parte1">
 
-<h3>Prueba recomendada:</h3>
+<div class="elemento fuego">
 
-<div id="sugerencia">
-Esperando datos...
+<div class="icono">🔥</div>
+
+<h3>Fuego ×4</h3>
+
+<input
+type="number"
+id="F_b"
+min="0"
+max="4"
+value="0">
+
 </div>
 
 
-<h3>Resultado:</h3>
+<div class="elemento aire">
+
+<div class="icono">🌪</div>
+
+<h3>Aire ×4</h3>
+
+<input
+type="number"
+id="A_b"
+min="0"
+max="4"
+value="0">
+
+</div>
 
 
-Blancos:
+<div class="elemento agua">
 
-<input id="resultadoB" type="number" min="0" max="4">
+<div class="icono">💧</div>
+
+<h3>Agua ×4</h3>
+
+<input
+type="number"
+id="W_b"
+min="0"
+max="4"
+value="0">
+
+</div>
 
 
-Negros:
+<div class="elemento tierra">
 
-<input id="resultadoN" type="number" min="0" max="4">
+<div class="icono">🌍</div>
 
+<h3>Tierra ×4</h3>
 
-<br><br>
+<input
+type="number"
+id="T_b"
+min="0"
+max="4"
+value="0">
 
+</div>
 
-<button onclick="guardarResultado()">
-Enviar resultado
+</div>
+
+<button
+id="btnGenerar"
+onclick="crearSolver()">
+
+Generar combinaciones
+
 </button>
 
+<hr>
 
+<div
+id="parte2"
+style="display:none;">
+
+<h2>PARTE 2</h2>
+
+<p class="texto">
+
+Prueba la combinación sugerida dentro del juego.
+
+Después introduce el resultado obtenido.
+
+</p>
+
+
+<div class="cajaPrueba">
+
+<div>
+
+<h3>Prueba recomendada</h3>
+
+<div id="sugerencia">
+
+Esperando...
+
+</div>
+
+</div>
+
+<div class="resultado">
+
+<label>
+
+⚪ Blancos
+
+<input
+type="number"
+id="resultadoB"
+min="0"
+max="4"
+value="0">
+
+</label>
+
+<label>
+
+⚫ Negros
+
+<input
+type="number"
+id="resultadoN"
+min="0"
+max="4"
+value="0">
+
+</label>
+
+<button
+onclick="guardarResultado()">
+
+Confirmar resultado
+
+</button>
+
+</div>
+
+</div>
+
+<hr>
+
+<h2>Historial</h2>
+
+<div id="historial">
+
+Aún no hay intentos.
+
+</div>
+
+<hr>
 
 <h2>Estado</h2>
 
-<div id="estado"></div>
+<div id="estado">
 
+Sin iniciar.
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="botonesInferiores">
+
+<button
+onclick="reiniciar()">
+
+🔄 Reiniciar Solver
+
+</button>
+
+</div>
+
+</div>
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
