@@ -4,129 +4,115 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnStart = document.getElementById('btn-start');
     const btnFilter = document.getElementById('btn-filter');
-    const part1 = document.getElementById('part1');
-    const part2 = document.getElementById('part2');
-    const errorMsg = document.getElementById('error-msg');
+    const circleBtns = document.querySelectorAll('.circle-btn');
 
-    // 1. Generar combinaciones iniciales
-    btnStart.addEventListener('click', () => {
-        const t = parseInt(document.getElementById('in-tierra').value) || 0;
-        const f = parseInt(document.getElementById('in-fuego').value) || 0;
-        const w = parseInt(document.getElementById('in-agua').value) || 0;
-        const a = parseInt(document.getElementById('in-aire').value) || 0;
-
-        if (t + f + w + a !== 4) {
-            errorMsg.textContent = "La suma de elementos debe ser exactamente 4.";
-            return;
-        }
-
-        errorMsg.textContent = "";
-        
-        // Crear lista de elementos según cantidades
-        let elementsBase = [];
-        for(let i=0; i<t; i++) elementsBase.push("tierra");
-        for(let i=0; i<f; i++) elementsBase.push("fuego");
-        for(let i=0; i<w; i++) elementsBase.push("agua");
-        for(let i=0; i<a; i++) elementsBase.push("aire");
-
-        possibilities = generateUniquePermutations(elementsBase);
-        
-        part1.classList.add('hidden');
-        part2.classList.remove('hidden');
-        
-        updateGuess();
+    // Cambiar estado del círculo al hacer clic (Nada -> Blanco -> Negro)
+    circleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const states = ['none', 'white', 'black'];
+            let current = states.indexOf(btn.dataset.state);
+            btn.dataset.state = states[(current + 1) % states.length];
+        });
     });
 
-    // 2. Filtrar combinaciones según feedback
-    btnFilter.addEventListener('click', () => {
-        const white = parseInt(document.getElementById('res-white').value) || 0;
-        const black = parseInt(document.getElementById('res-black').value) || 0;
+    btnStart.addEventListener('click', () => {
+        const counts = {
+            tierra: parseInt(document.getElementById('in-tierra').value) || 0,
+            fuego: parseInt(document.getElementById('in-fuego').value) || 0,
+            agua: parseInt(document.getElementById('in-agua').value) || 0,
+            aire: parseInt(document.getElementById('in-aire').value) || 0
+        };
 
-        if (white === 4) {
-            alert("¡Solución encontrada!");
+        if (counts.tierra + counts.fuego + counts.agua + counts.aire !== 4) {
+            alert("La suma debe ser 4");
             return;
         }
 
+        let base = [];
+        for(let el in counts) for(let i=0; i<counts[el]; i++) base.push(el);
+        
+        possibilities = generateUniquePermutations(base);
+        document.getElementById('part1').classList.add('hidden');
+        document.getElementById('part2').classList.remove('hidden');
+        updateGuessUI();
+    });
+
+    btnFilter.addEventListener('click', () => {
+        // Capturar el feedback visual del usuario
+        const userFeedback = Array.from(circleBtns).map(btn => btn.dataset.state);
+
+        // Filtrar combinaciones
         possibilities = possibilities.filter(p => {
-            const feed = getMastermindFeedback(currentGuess, p);
-            return feed.white === white && feed.black === black;
+            const simulatedFeedback = getPositionalFeedback(currentGuess, p);
+            return JSON.stringify(simulatedFeedback) === JSON.stringify(userFeedback);
         });
 
         if (possibilities.length === 0) {
-            alert("No hay combinaciones posibles. Revisa si anotaste bien los círculos.");
+            alert("No hay combinaciones posibles. Revisa los datos.");
             location.reload();
         } else {
-            updateGuess();
+            updateGuessUI();
         }
     });
 
-    function updateGuess() {
+    function updateGuessUI() {
         currentGuess = possibilities[0];
         document.getElementById('count-text').textContent = possibilities.length;
-        
-        const display = document.getElementById('display-guess');
-        display.innerHTML = "";
-        
-        currentGuess.forEach(el => {
-            const pill = document.createElement('div');
-            pill.className = `pill pill-${el}`;
-            pill.textContent = el;
-            display.appendChild(pill);
-        });
 
-        // Limpiar inputs
-        document.getElementById('res-white').value = 0;
-        document.getElementById('res-black').value = 0;
+        for (let i = 0; i < 4; i++) {
+            const slot = document.getElementById(`slot-${i}`);
+            const pill = slot.querySelector('.pill');
+            const btn = slot.querySelector('.circle-btn');
+            
+            pill.textContent = currentGuess[i];
+            pill.className = `pill pill-${currentGuess[i]}`;
+            btn.dataset.state = 'none'; // Resetear círculos para el nuevo intento
+        }
+
+        if (possibilities.length === 1) {
+            alert("¡Solución encontrada!");
+            document.getElementById('btn-filter').classList.add('hidden');
+        }
     }
 
-    // Algoritmo para calcular blancos y negros
-    function getMastermindFeedback(guess, solution) {
-        let white = 0;
-        let black = 0;
+    // Lógica Mastermind POSICIONAL (Hueco por hueco)
+    function getPositionalFeedback(guess, solution) {
+        let result = ['none', 'none', 'none', 'none'];
         let g = [...guess];
         let s = [...solution];
 
-        // Blancos: posición exacta
+        // Primero marcamos los Blancos (Posición exacta)
         for (let i = 0; i < 4; i++) {
             if (g[i] === s[i]) {
-                white++;
+                result[i] = 'white';
                 g[i] = s[i] = null;
             }
         }
 
-        // Negros: elemento correcto, posición mal
+        // Luego los Negros (Está en la solución pero en otro sitio)
         for (let i = 0; i < 4; i++) {
             if (g[i] !== null) {
-                let idx = s.indexOf(g[i]);
-                if (idx !== -1) {
-                    black++;
-                    s[idx] = null;
+                let foundIdx = s.indexOf(g[i]);
+                if (foundIdx !== -1) {
+                    result[i] = 'black';
+                    s[foundIdx] = null;
                 }
             }
         }
-        return { white, black };
+        return result;
     }
 
-    // Generar permutaciones únicas (Multiset Permutations)
     function generateUniquePermutations(arr) {
         let results = [];
-
-        function permute(current, remaining) {
-            if (remaining.length === 0) {
-                results.push(current);
-                return;
-            }
+        const permute = (current, remaining) => {
+            if (remaining.length === 0) { results.push(current); return; }
             let seen = new Set();
             for (let i = 0; i < remaining.length; i++) {
                 if (seen.has(remaining[i])) continue;
                 seen.add(remaining[i]);
-                
-                let nextCurrent = [...current, remaining[i]];
-                let nextRemaining = [...remaining.slice(0, i), ...remaining.slice(i + 1)];
-                permute(nextCurrent, nextRemaining);
+                permute([...current, remaining[i]], [...remaining.slice(0, i), ...remaining.slice(i + 1)]);
             }
-        }
-
+        };
         permute([], arr);
         return results;
     }
