@@ -1,36 +1,25 @@
 body { background: #121212; color: #eee; font-family: sans-serif; display: flex; justify-content: center; padding: 10px; }
-.container { background: #1e1e1e; padding: 20px; border-radius: 15px; max-width: 400px; width: 100%; text-align: center; }
+.container { background: #1e1e1e; padding: 20px; border-radius: 15px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+h1 { color: #ffcc00; margin-bottom: 5px; }
+.instruction { font-size: 0.85rem; color: #bbb; margin-bottom: 20px; }
 .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .card { background: #2a2a2a; padding: 10px; border-radius: 8px; display: flex; flex-direction: column; }
-input { background: #000; border: 1px solid #444; color: #fff; padding: 8px; font-size: 1.2rem; text-align: center; }
-button { background: #ffcc00; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
-
+input { background: #000; border: 1px solid #444; color: #fff; padding: 8px; font-size: 1.2rem; text-align: center; border-radius: 5px; }
+button { background: #ffcc00; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; }
 .hidden { display: none; }
 
-/* Estilos de los Slots en Parte 2 */
-#solver-ui { display: flex; justify-content: space-between; margin-top: 20px; gap: 5px; }
-.slot-container { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; }
-
-.pill { padding: 8px 2px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; width: 100%; color: white; text-transform: uppercase; }
+.pill-container { display: flex; justify-content: center; gap: 8px; margin: 20px 0; }
+.pill { padding: 10px 5px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; width: 75px; text-transform: uppercase; color: white; }
 .pill-tierra { background: #795548; }
 .pill-fuego { background: #d32f2f; }
 .pill-agua { background: #1976d2; }
 .pill-aire { background: #689f38; }
 
-.circle-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 3px solid #444;
-    cursor: pointer;
-    background: #111;
-    transition: 0.2s;
-}
+.circles-row { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+.circle { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #444; cursor: pointer; background: #111; transition: 0.2s; }
+.circle[data-state="white"] { background: white; border-color: #fff; box-shadow: 0 0 10px white; }
+.circle[data-state="black"] { background: #333; border-color: #000; }
 
-/* Estados del círculo */
-.circle-btn[data-state="white"] { background: white; border-color: #ccc; }
-.circle-btn[data-state="black"] { background: #333; border-color: #000; }
-.circle-btn[data-state="none"] { background: transparent; border-color: #444; }
-
-.info-bar { margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #444; padding-top: 10px; }
-.btn-reset { width: auto; background: #444; color: white; padding: 5px 10px; }
+.footer { margin-top: 30px; border-top: 1px solid #444; padding-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+.btn-reset { width: auto; background: #444; color: white; padding: 6px 12px; font-size: 0.8rem; }
+.success { color: #4caf50; }
