@@ -1,72 +1,54 @@
-let elementos=[
-"F","F","F","F",
-"A","A","A","A",
-"W","W","W","W",
-"T","T","T","T"
-];
-
+let elementos=["F","A","W","T"];
 
 let soluciones=[];
 
-let intento=[];
+let intentoActual=[];
+
+let historial=[];
 
 
-// Crear todas las combinaciones posibles
-function generar(){
 
-soluciones=[];
+function generarCombinaciones(){
+
+let lista=[];
 
 
-function combinar(actual){
+function crear(actual){
 
 if(actual.length==4){
 
-soluciones.push(actual);
+lista.push(actual);
 return;
 
 }
 
 
-for(let e of ["F","A","W","T"]){
+for(let e of elementos){
 
-combinar([...actual,e]);
-
-}
-
-}
-
-combinar([]);
-
-}
-
-
-generar();
-
-
-
-function añadir(e){
-
-if(intento.length<4){
-
-intento.push(e);
-
-document.getElementById("prueba").innerHTML=
-intento.join(" ");
+crear([...actual,e]);
 
 }
 
 }
+
+
+crear([]);
+
+return lista;
+
+}
+
 
 
 
 function comparar(a,b){
 
 let blancos=0;
+let negros=0;
+
 let usadosA=[];
 let usadosB=[];
 
-
-// blancos
 
 for(let i=0;i<4;i++){
 
@@ -82,10 +64,6 @@ usadosB[i]=true;
 }
 
 
-// negros
-
-let negros=0;
-
 
 for(let i=0;i<4;i++){
 
@@ -96,7 +74,6 @@ for(let j=0;j<4;j++){
 if(!usadosB[j] && a[i]==b[j]){
 
 negros++;
-
 usadosB[j]=true;
 break;
 
@@ -105,7 +82,6 @@ break;
 }
 
 }
-
 
 }
 
@@ -116,37 +92,58 @@ return [blancos,negros];
 
 
 
-function guardarResultado(){
 
 
-let blancos=
-Number(document.getElementById("blancos").value);
+function crearSolver(){
 
 
-let negros=
-Number(document.getElementById("negros").value);
+let cantidades={};
+
+
+for(let e of elementos){
+
+let id=e+"_n";
+
+let cantidad=
+Number(document.getElementById(id).value);
+
+
+cantidades[e]=cantidad;
+
+}
+
+
+
+soluciones=generarCombinaciones();
 
 
 
 soluciones=
-soluciones.filter(sol=>{
+soluciones.filter(c=>{
 
-let r=comparar(intento,sol);
+let cuenta={F:0,A:0,W:0,T:0};
 
-return r[0]==blancos && r[1]==negros;
+
+c.forEach(x=>cuenta[x]++);
+
+
+
+return Object.keys(cuenta)
+.every(x=>cuenta[x]==cantidades[x]);
 
 });
 
 
 
-intento=[];
-
-
-document.getElementById("prueba").innerHTML="";
-
 mostrar();
 
+
+document.getElementById("estado").innerHTML=
+"Soluciones posibles: "+soluciones.length;
+
+
 }
+
 
 
 
@@ -156,7 +153,7 @@ function mostrar(){
 
 if(soluciones.length==0){
 
-document.getElementById("respuesta").innerHTML=
+document.getElementById("sugerencia").innerHTML=
 "No quedan soluciones";
 
 return;
@@ -165,16 +162,86 @@ return;
 
 
 
-let sugerencia=
+intentoActual=
 soluciones[Math.floor(Math.random()*soluciones.length)];
 
 
-document.getElementById("respuesta").innerHTML=
-sugerencia.join(" ");
 
+document.getElementById("sugerencia").innerHTML=
+convertir(intentoActual);
 
 
 }
 
 
+
+function convertir(c){
+
+return c.map(x=>{
+
+if(x=="F") return "🔥";
+
+if(x=="A") return "🌪";
+
+if(x=="W") return "💧";
+
+if(x=="T") return "🌍";
+
+}).join(" ");
+
+}
+
+
+
+
+
+function guardarResultado(){
+
+
+let blancos=
+Number(document.getElementById("resultadoB").value);
+
+
+let negros=
+Number(document.getElementById("resultadoN").value);
+
+
+
+historial.push({
+
+intento:intentoActual,
+blancos,
+negros
+
+});
+
+
+
+soluciones=
+soluciones.filter(sol=>{
+
+let r=comparar(intentoActual,sol);
+
+
+return r[0]==blancos &&
+r[1]==negros;
+
+});
+
+
+
 mostrar();
+
+
+document.getElementById("estado").innerHTML=
+`
+Intentos:
+${historial.length}
+
+<br>
+
+Soluciones restantes:
+${soluciones.length}
+`;
+
+}
