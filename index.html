@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solucionador de Osamodas</title>
+    <title>Invocación de Osamodas</title>
     <style>
         * {
             margin: 0;
@@ -18,309 +18,51 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .container {
             background: #2a2a2a;
             border-radius: 15px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            max-width: 500px;
+            max-width: 450px;
             width: 100%;
-            padding: 25px;
+            padding: 20px;
             border: 2px solid #444;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+
+        .header img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 2px solid #3498db;
         }
 
         .header h1 {
-            font-size: 2em;
+            font-size: 1.6em;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         .header p {
             color: #aaa;
-            font-size: 0.9em;
-        }
-
-        .section {
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 1.1em;
-            color: #fff;
-            margin-bottom: 12px;
-            font-weight: bold;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 8px;
-        }
-
-        .elements-selector {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .slot {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .slot-label {
             font-size: 0.85em;
-            color: #aaa;
-            text-align: center;
-        }
-
-        .element-btn {
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .element-btn.aire {
-            background: #2ecc71;
-            color: #fff;
-        }
-
-        .element-btn.tierra {
-            background: #8B6914;
-            color: #fff;
-        }
-
-        .element-btn.fuego {
-            background: #e74c3c;
-            color: #fff;
-        }
-
-        .element-btn.agua {
-            background: #3498db;
-            color: #fff;
-        }
-
-        .element-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .element-btn.selected {
-            box-shadow: 0 0 15px currentColor;
-            border: 2px solid #fff;
-        }
-
-        .selected-display {
-            background: #1a1a1a;
-            border: 2px solid #555;
-            border-radius: 8px;
-            padding: 12px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .selected-item {
-            background: #3a3a3a;
-            padding: 10px;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: bold;
-            color: #aaa;
-            font-size: 0.9em;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #555;
-        }
-
-        .selected-item.aire {
-            background: #2ecc71;
-            color: #fff;
-            border-color: #27ae60;
-        }
-
-        .selected-item.tierra {
-            background: #8B6914;
-            color: #fff;
-            border-color: #6b5010;
-        }
-
-        .selected-item.fuego {
-            background: #e74c3c;
-            color: #fff;
-            border-color: #c0392b;
-        }
-
-        .selected-item.agua {
-            background: #3498db;
-            color: #fff;
-            border-color: #2980b9;
-        }
-
-        .feedback-input {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .feedback-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .feedback-group label {
-            color: #fff;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-
-        .feedback-group input {
-            padding: 10px;
-            border: 2px solid #555;
-            border-radius: 6px;
-            font-size: 1em;
-            background: #3a3a3a;
-            color: #fff;
-            text-align: center;
-            transition: border-color 0.3s;
-        }
-
-        .feedback-group input:focus {
-            outline: none;
-            border-color: #3498db;
-            background: #444;
-        }
-
-        .circle-preview {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-            min-height: 30px;
-            align-items: center;
-            margin-top: 8px;
-        }
-
-        .circle {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 2px solid #555;
-        }
-
-        .circle.white {
-            background: #fff;
-            border-color: #fff;
-        }
-
-        .circle.black {
-            background: #333;
-            border-color: #666;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-send {
-            background: #3498db;
-            color: white;
-        }
-
-        .btn-send:hover:not(:disabled) {
-            background: #2980b9;
-        }
-
-        .btn-send:disabled {
-            background: #555;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        .btn-reset {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .btn-reset:hover {
-            background: #c0392b;
-        }
-
-        .btn-clear {
-            background: #555;
-            color: #fff;
-            padding: 8px;
-        }
-
-        .btn-clear:hover {
-            background: #666;
-        }
-
-        .history {
-            background: #1a1a1a;
-            border: 2px solid #444;
-            border-radius: 8px;
-            padding: 12px;
-            max-height: 180px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            padding: 8px;
-            margin-bottom: 6px;
-            background: #3a3a3a;
-            border-left: 3px solid #3498db;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: #fff;
-        }
-
-        .history-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .history-empty {
-            color: #666;
-            text-align: center;
-            font-size: 0.9em;
         }
 
         .status-message {
-            padding: 10px;
+            padding: 8px;
             border-radius: 6px;
             text-align: center;
             font-weight: bold;
             margin-bottom: 12px;
             display: none;
-            font-size: 0.95em;
+            font-size: 0.9em;
         }
 
         .status-message.success {
@@ -341,19 +83,308 @@
             display: block;
         }
 
+        .section {
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 0.95em;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: bold;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+
+        /* SUGERENCIA */
+        .suggestion-box {
+            background: #1a1a1a;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .suggestion-text {
+            color: #aaa;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .suggestion-combo {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .suggestion-item {
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 0.9em;
+            border: 2px solid transparent;
+        }
+
+        .suggestion-item.aire {
+            background: #2ecc71;
+        }
+
+        .suggestion-item.tierra {
+            background: #8B6914;
+        }
+
+        .suggestion-item.fuego {
+            background: #e74c3c;
+        }
+
+        .suggestion-item.agua {
+            background: #3498db;
+        }
+
+        /* SELECTOR DE ELEMENTOS */
+        .elements-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .position-slot {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .position-label {
+            font-size: 0.75em;
+            color: #999;
+            text-align: center;
+        }
+
+        .element-selector {
+            background: #3a3a3a;
+            border: 2px solid #555;
+            border-radius: 6px;
+            padding: 8px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .element-selector:hover {
+            border-color: #3498db;
+            background: #444;
+        }
+
+        .element-selector.aire {
+            background: #2ecc71;
+            color: #fff;
+            border-color: #27ae60;
+        }
+
+        .element-selector.tierra {
+            background: #8B6914;
+            color: #fff;
+            border-color: #6b5010;
+        }
+
+        .element-selector.fuego {
+            background: #e74c3c;
+            color: #fff;
+            border-color: #c0392b;
+        }
+
+        .element-selector.agua {
+            background: #3498db;
+            color: #fff;
+            border-color: #2980b9;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background: #3a3a3a;
+            border: 2px solid #3498db;
+            border-radius: 6px;
+            z-index: 1000;
+            min-width: 120px;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            color: #fff;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+            transition: background 0.2s;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #444;
+        }
+
+        .dropdown-item.aire { color: #2ecc71; font-weight: bold; }
+        .dropdown-item.tierra { color: #8B6914; font-weight: bold; }
+        .dropdown-item.fuego { color: #e74c3c; font-weight: bold; }
+        .dropdown-item.agua { color: #3498db; font-weight: bold; }
+
+        /* FEEDBACK CIRCLES */
+        .feedback-circles {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .circle-slot {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .circle-slot-label {
+            font-size: 0.7em;
+            color: #999;
+        }
+
+        .circle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid #555;
+            background: #3a3a3a;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .circle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .circle-btn.white {
+            background: #fff;
+            border-color: #fff;
+            color: #000;
+        }
+
+        .circle-btn.black {
+            background: #333;
+            border-color: #666;
+        }
+
+        .circle-btn.empty {
+            background: #3a3a3a;
+            border-color: #555;
+        }
+
+        /* BOTONES */
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-confirm {
+            background: #27ae60;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-confirm:hover {
+            background: #229954;
+        }
+
+        .btn-reset {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #c0392b;
+        }
+
+        .btn-skip {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-skip:hover {
+            background: #2980b9;
+        }
+
+        /* HISTORIAL */
+        .history {
+            background: #1a1a1a;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 0.85em;
+        }
+
+        .history-item {
+            padding: 6px;
+            margin-bottom: 4px;
+            background: #3a3a3a;
+            border-left: 3px solid #3498db;
+            border-radius: 3px;
+            color: #fff;
+        }
+
+        .history-empty {
+            color: #666;
+            text-align: center;
+            padding: 8px;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            font-size: 0.9em;
+            gap: 8px;
+            font-size: 0.85em;
             color: #aaa;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .stat-item {
             background: #3a3a3a;
-            padding: 8px;
+            padding: 6px;
             border-radius: 6px;
             border: 1px solid #555;
         }
@@ -361,20 +392,21 @@
         .stat-value {
             color: #3498db;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 500px) {
             .container {
-                padding: 20px;
+                padding: 15px;
+            }
+
+            .header img {
+                width: 60px;
+                height: 60px;
             }
 
             .header h1 {
-                font-size: 1.6em;
-            }
-
-            .elements-selector {
-                grid-template-columns: repeat(2, 1fr);
+                font-size: 1.4em;
             }
         }
     </style>
@@ -382,105 +414,109 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧩 Osamodas</h1>
+            <img src="https://dofuspedia.fandom.com/es/wiki/Archivo:Invocaci%C3%B3n_de_Osamodas.png" alt="Invocación de Osamodas" onerror="this.style.display='none'">
+            <h1>Invocación de Osamodas</h1>
             <p>Solucionador de Códigos</p>
         </div>
 
         <div id="statusMessage" class="status-message"></div>
 
-        <!-- PASO 1: SELECCIONAR ELEMENTOS -->
-        <div class="section">
-            <div class="section-title">1️⃣ Selecciona los 4 Elementos</div>
-            
-            <div class="elements-selector">
-                <div class="slot">
-                    <div class="slot-label">Posición 1</div>
-                    <button class="element-btn aire" onclick="selectElement(0, 'aire')">🌪️ Aire</button>
-                    <button class="element-btn tierra" onclick="selectElement(0, 'tierra')">🌍 Tierra</button>
-                </div>
-                <div class="slot">
-                    <div class="slot-label">Posición 2</div>
-                    <button class="element-btn fuego" onclick="selectElement(1, 'fuego')">🔥 Fuego</button>
-                    <button class="element-btn agua" onclick="selectElement(1, 'agua')">💧 Agua</button>
-                </div>
-                <div class="slot">
-                    <div class="slot-label">Posición 3</div>
-                    <button class="element-btn aire" onclick="selectElement(2, 'aire')">🌪️ Aire</button>
-                    <button class="element-btn tierra" onclick="selectElement(2, 'tierra')">🌍 Tierra</button>
-                </div>
-                <div class="slot">
-                    <div class="slot-label">Posición 4</div>
-                    <button class="element-btn fuego" onclick="selectElement(3, 'fuego')">🔥 Fuego</button>
-                    <button class="element-btn agua" onclick="selectElement(3, 'agua')">💧 Agua</button>
-                </div>
-            </div>
-
-            <div class="selected-display" id="selectedDisplay">
-                <div class="selected-item">-</div>
-                <div class="selected-item">-</div>
-                <div class="selected-item">-</div>
-                <div class="selected-item">-</div>
+        <!-- SUGERENCIA -->
+        <div class="suggestion-box">
+            <div class="suggestion-text">📍 Intenta esta combinación:</div>
+            <div class="suggestion-combo" id="suggestionCombo">
+                <div class="suggestion-item aire">Aire</div>
+                <div class="suggestion-item tierra">Tierra</div>
+                <div class="suggestion-item fuego">Fuego</div>
+                <div class="suggestion-item agua">Agua</div>
             </div>
         </div>
 
-        <!-- PASO 2: INGRESAR FEEDBACK -->
+        <!-- SELECTOR DE ELEMENTOS -->
         <div class="section">
-            <div class="section-title">2️⃣ Resultado del Juego</div>
-            
-            <div class="feedback-input">
-                <div class="feedback-group">
-                    <label for="whiteCircles">⚪ Blancos</label>
-                    <input type="number" id="whiteCircles" min="0" max="4" value="0" onchange="updatePreview()">
+            <div class="section-title">Tu Combinación</div>
+            <div class="elements-row" id="elementsRow">
+                <div class="position-slot">
+                    <div class="position-label">Pos 1</div>
+                    <div class="element-selector" onclick="toggleDropdown(0)">-</div>
                 </div>
-                <div class="feedback-group">
-                    <label for="blackCircles">⚫ Negros</label>
-                    <input type="number" id="blackCircles" min="0" max="4" value="0" onchange="updatePreview()">
+                <div class="position-slot">
+                    <div class="position-label">Pos 2</div>
+                    <div class="element-selector" onclick="toggleDropdown(1)">-</div>
+                </div>
+                <div class="position-slot">
+                    <div class="position-label">Pos 3</div>
+                    <div class="element-selector" onclick="toggleDropdown(2)">-</div>
+                </div>
+                <div class="position-slot">
+                    <div class="position-label">Pos 4</div>
+                    <div class="element-selector" onclick="toggleDropdown(3)">-</div>
                 </div>
             </div>
+        </div>
 
-            <div class="circle-preview" id="circlePreview"></div>
-
-            <div class="button-group">
-                <button class="btn-send" onclick="submitAttempt()">✓ Enviar</button>
-                <button class="btn-clear" onclick="clearSelection()">Limpiar</button>
+        <!-- FEEDBACK CIRCLES -->
+        <div class="section">
+            <div class="section-title">Resultado del Juego</div>
+            <div class="feedback-circles" id="feedbackCircles">
+                <div class="circle-slot">
+                    <div class="circle-slot-label">Pos 1</div>
+                    <div class="circle-btn empty" onclick="cycleCircle(0)"></div>
+                </div>
+                <div class="circle-slot">
+                    <div class="circle-slot-label">Pos 2</div>
+                    <div class="circle-btn empty" onclick="cycleCircle(1)"></div>
+                </div>
+                <div class="circle-slot">
+                    <div class="circle-slot-label">Pos 3</div>
+                    <div class="circle-btn empty" onclick="cycleCircle(2)"></div>
+                </div>
+                <div class="circle-slot">
+                    <div class="circle-slot-label">Pos 4</div>
+                    <div class="circle-btn empty" onclick="cycleCircle(3)"></div>
+                </div>
             </div>
         </div>
 
         <!-- ESTADÍSTICAS -->
         <div class="stats">
-            <div class="stat-item">
-                Intentos: <span class="stat-value" id="attemptCount">0</span>
-            </div>
-            <div class="stat-item">
-                Posibles: <span class="stat-value" id="combinationCount">256</span>
-            </div>
+            <div class="stat-item">Intentos: <span class="stat-value" id="attemptCount">0</span></div>
+            <div class="stat-item">Posibles: <span class="stat-value" id="combinationCount">256</span></div>
         </div>
+
+        <!-- BOTONES -->
+        <div class="button-group">
+            <button class="btn-skip" onclick="useSuggestion()">📋 Usar Sugerencia</button>
+            <button class="btn-reset" onclick="resetSolver()">🔄 Reiniciar</button>
+        </div>
+
+        <button class="btn-confirm" onclick="submitFeedback()">✓ Confirmar Resultado</button>
 
         <!-- HISTORIAL -->
         <div class="section">
             <div class="section-title">📊 Historial</div>
-            <div class="history" id="historyContainer">
+            <div class="history" id="history">
                 <div class="history-empty">Sin intentos aún</div>
             </div>
         </div>
-
-        <button class="btn-reset" onclick="resetSolver()" style="width: 100%;">🔄 Reiniciar Todo</button>
     </div>
 
     <script>
         const ELEMENTS = ['Aire', 'Tierra', 'Fuego', 'Agua'];
-        const ELEMENT_NAMES = {
-            'aire': 'Aire',
-            'tierra': 'Tierra',
-            'fuego': 'Fuego',
-            'agua': 'Agua'
+        const ELEMENT_CLASS = {
+            'Aire': 'aire',
+            'Tierra': 'tierra',
+            'Fuego': 'fuego',
+            'Agua': 'agua'
         };
 
         let solver = {
             possibleCombinations: generateAllCombinations(),
             attempts: [],
             feedbackHistory: [],
-            currentSelection: [null, null, null, null]
+            currentSelection: [null, null, null, null],
+            currentFeedback: ['empty', 'empty', 'empty', 'empty'],
+            currentSuggestion: ['Aire', 'Aire', 'Tierra', 'Tierra']
         };
 
         function generateAllCombinations() {
@@ -497,56 +533,77 @@
             return combinations;
         }
 
-        function selectElement(position, element) {
-            solver.currentSelection[position] = ELEMENT_NAMES[element];
-            updateDisplay();
+        function toggleDropdown(position) {
+            const selectors = document.querySelectorAll('.element-selector');
+            const selector = selectors[position];
+            
+            let dropdown = selector.parentElement.querySelector('.dropdown-menu');
+            if (!dropdown) {
+                dropdown = document.createElement('div');
+                dropdown.className = 'dropdown-menu';
+                dropdown.innerHTML = ELEMENTS.map(el => 
+                    `<div class="dropdown-item ${ELEMENT_CLASS[el].toLowerCase()}" onclick="selectElement(${position}, '${el}')">${el}</div>`
+                ).join('');
+                selector.parentElement.appendChild(dropdown);
+            }
+            
+            dropdown.classList.toggle('active');
         }
 
-        function updateDisplay() {
-            const display = document.getElementById('selectedDisplay');
-            display.innerHTML = '';
-            
-            solver.currentSelection.forEach((element, index) => {
-                const div = document.createElement('div');
-                div.className = 'selected-item';
-                
-                if (element) {
-                    div.textContent = element.substring(0, 4);
-                    div.classList.add(element.toLowerCase());
-                } else {
-                    div.textContent = '-';
-                }
-                
-                display.appendChild(div);
+        function selectElement(position, element) {
+            solver.currentSelection[position] = element;
+            updateSelectors();
+            closeAllDropdowns();
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('active');
             });
         }
 
-        function updatePreview() {
-            const white = parseInt(document.getElementById('whiteCircles').value) || 0;
-            const black = parseInt(document.getElementById('blackCircles').value) || 0;
-            
-            const preview = document.getElementById('circlePreview');
-            preview.innerHTML = '';
-            
-            for (let i = 0; i < white; i++) {
-                const circle = document.createElement('div');
-                circle.className = 'circle white';
-                preview.appendChild(circle);
-            }
-            
-            for (let i = 0; i < black; i++) {
-                const circle = document.createElement('div');
-                circle.className = 'circle black';
-                preview.appendChild(circle);
-            }
+        function updateSelectors() {
+            const selectors = document.querySelectorAll('.element-selector');
+            selectors.forEach((sel, i) => {
+                const element = solver.currentSelection[i];
+                if (element) {
+                    sel.textContent = element.substring(0, 4);
+                    sel.className = `element-selector ${ELEMENT_CLASS[element].toLowerCase()}`;
+                } else {
+                    sel.textContent = '-';
+                    sel.className = 'element-selector';
+                }
+            });
         }
 
-        function clearSelection() {
-            solver.currentSelection = [null, null, null, null];
-            document.getElementById('whiteCircles').value = 0;
-            document.getElementById('blackCircles').value = 0;
-            updateDisplay();
-            updatePreview();
+        function cycleCircle(position) {
+            const states = ['empty', 'white', 'black'];
+            const currentIndex = states.indexOf(solver.currentFeedback[position]);
+            const nextIndex = (currentIndex + 1) % states.length;
+            solver.currentFeedback[position] = states[nextIndex];
+            updateCircles();
+        }
+
+        function updateCircles() {
+            const circles = document.querySelectorAll('.circle-btn');
+            circles.forEach((circle, i) => {
+                circle.className = `circle-btn ${solver.currentFeedback[i]}`;
+                if (solver.currentFeedback[i] === 'white') {
+                    circle.textContent = '⚪';
+                } else if (solver.currentFeedback[i] === 'black') {
+                    circle.textContent = '⚫';
+                } else {
+                    circle.textContent = '';
+                }
+            });
+        }
+
+        function useSuggestion() {
+            solver.currentSelection = [...solver.currentSuggestion];
+            solver.currentFeedback = ['empty', 'empty', 'empty', 'empty'];
+            updateSelectors();
+            updateCircles();
+            showStatus('Usa esta combinación en el juego', 'info');
         }
 
         function calculateFeedback(guess, secret) {
@@ -576,37 +633,28 @@
             return { white: whiteCircles, black: blackCircles };
         }
 
-        function submitAttempt() {
-            // Validar selección
+        function submitFeedback() {
             if (solver.currentSelection.includes(null)) {
                 showStatus('Selecciona los 4 elementos', 'error');
                 return;
             }
 
-            const white = parseInt(document.getElementById('whiteCircles').value);
-            const black = parseInt(document.getElementById('blackCircles').value);
+            const whiteCount = solver.currentFeedback.filter(f => f === 'white').length;
+            const blackCount = solver.currentFeedback.filter(f => f === 'black').length;
 
-            if (isNaN(white) || isNaN(black) || white < 0 || black < 0 || white + black > 4) {
-                showStatus('Feedback inválido', 'error');
-                return;
-            }
-
-            // Guardar intento
             solver.attempts.push([...solver.currentSelection]);
-            solver.feedbackHistory.push({ white, black });
+            solver.feedbackHistory.push({ white: whiteCount, black: blackCount });
 
-            // Verificar si ganó
-            if (white === 4) {
-                addToHistory(solver.currentSelection, white, black, true);
+            if (whiteCount === 4) {
+                addToHistory(solver.currentSelection, whiteCount, blackCount, true);
                 showStatus(`🎉 ¡CÓDIGO ENCONTRADO!`, 'success');
                 return;
             }
 
-            // Filtrar combinaciones posibles
             const newPossible = [];
             for (let combo of solver.possibleCombinations) {
                 const feedback = calculateFeedback(solver.currentSelection, combo);
-                if (feedback.white === white && feedback.black === black) {
+                if (feedback.white === whiteCount && feedback.black === blackCount) {
                     newPossible.push(combo);
                 }
             }
@@ -616,44 +664,70 @@
             if (solver.possibleCombinations.length === 0) {
                 showStatus('❌ Error en el feedback', 'error');
             } else {
-                addToHistory(solver.currentSelection, white, black);
-                showStatus(`✓ Intento guardado - ${solver.possibleCombinations.length} posibilidades`, 'success');
+                addToHistory(solver.currentSelection, whiteCount, blackCount);
                 
-                // Limpiar y mostrar siguiente sugerencia
-                clearSelection();
-                suggestNext();
+                if (solver.possibleCombinations.length === 1) {
+                    solver.currentSuggestion = solver.possibleCombinations[0];
+                } else {
+                    solver.currentSuggestion = getNextGuess();
+                }
+                
+                updateSuggestion();
+                clearForNextAttempt();
+                updateStats();
+                showStatus(`✓ ${solver.possibleCombinations.length} posibilidades restantes`, 'success');
             }
-
-            updateStats();
         }
 
-        function suggestNext() {
-            let suggestedCombo = solver.possibleCombinations[0];
-            
-            if (solver.attempts.length === 0) {
-                suggestedCombo = ['Aire', 'Aire', 'Tierra', 'Tierra'];
+        function getNextGuess() {
+            let bestGuess = solver.possibleCombinations[0];
+            let bestScore = Infinity;
+
+            for (let guess of solver.possibleCombinations.slice(0, 30)) {
+                const scores = {};
+
+                for (let combo of solver.possibleCombinations) {
+                    const feedback = calculateFeedback(guess, combo);
+                    const key = `${feedback.white},${feedback.black}`;
+                    scores[key] = (scores[key] || 0) + 1;
+                }
+
+                const maxScore = Math.max(...Object.values(scores));
+                if (maxScore < bestScore) {
+                    bestScore = maxScore;
+                    bestGuess = guess;
+                }
             }
 
-            // Auto-seleccionar
-            suggestedCombo.forEach((element, index) => {
-                solver.currentSelection[index] = element;
-            });
-            updateDisplay();
-            showStatus(`Siguiente sugerencia: ${suggestedCombo.join(' → ')}`, 'info');
+            return bestGuess;
+        }
+
+        function updateSuggestion() {
+            const suggestionCombo = document.getElementById('suggestionCombo');
+            suggestionCombo.innerHTML = solver.currentSuggestion.map(el => 
+                `<div class="suggestion-item ${ELEMENT_CLASS[el].toLowerCase()}">${el.substring(0, 4)}</div>`
+            ).join('');
+        }
+
+        function clearForNextAttempt() {
+            solver.currentSelection = [null, null, null, null];
+            solver.currentFeedback = ['empty', 'empty', 'empty', 'empty'];
+            updateSelectors();
+            updateCircles();
         }
 
         function addToHistory(combo, white, black, isWin = false) {
-            const container = document.getElementById('historyContainer');
+            const history = document.getElementById('history');
             
-            if (container.querySelector('.history-empty')) {
-                container.innerHTML = '';
+            if (history.querySelector('.history-empty')) {
+                history.innerHTML = '';
             }
 
             const item = document.createElement('div');
             item.className = 'history-item';
-            item.innerHTML = `<strong>#${solver.attempts.length}:</strong> ${combo.join(' → ')} | ⚪${white} ⚫${black}${isWin ? ' ✓' : ''}`;
-            container.appendChild(item);
-            container.scrollTop = container.scrollHeight;
+            item.textContent = `#${solver.attempts.length}: ${combo.join(' → ')} | ⚪${white} ⚫${black}${isWin ? ' ✓' : ''}`;
+            history.appendChild(item);
+            history.scrollTop = history.scrollHeight;
         }
 
         function updateStats() {
@@ -667,7 +741,7 @@
             status.className = `status-message ${type}`;
             setTimeout(() => {
                 status.className = 'status-message';
-            }, 4000);
+            }, 3500);
         }
 
         function resetSolver() {
@@ -675,23 +749,30 @@
                 possibleCombinations: generateAllCombinations(),
                 attempts: [],
                 feedbackHistory: [],
-                currentSelection: [null, null, null, null]
+                currentSelection: [null, null, null, null],
+                currentFeedback: ['empty', 'empty', 'empty', 'empty'],
+                currentSuggestion: ['Aire', 'Aire', 'Tierra', 'Tierra']
             };
 
-            document.getElementById('historyContainer').innerHTML = '<div class="history-empty">Sin intentos aún</div>';
-            document.getElementById('whiteCircles').value = 0;
-            document.getElementById('blackCircles').value = 0;
-            updateDisplay();
-            updatePreview();
+            document.getElementById('history').innerHTML = '<div class="history-empty">Sin intentos aún</div>';
+            updateSelectors();
+            updateCircles();
+            updateSuggestion();
             updateStats();
             showStatus('✓ Reiniciado', 'info');
         }
 
-        // Inicializar
         window.addEventListener('load', () => {
-            updateDisplay();
+            updateSelectors();
+            updateCircles();
             updateStats();
-            showStatus('Selecciona 4 elementos para comenzar', 'info');
+            showStatus('Usa la sugerencia o selecciona tus propios elementos', 'info');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.element-selector') && !e.target.closest('.dropdown-menu')) {
+                closeAllDropdowns();
+            }
         });
     </script>
 </body>
