@@ -4,76 +4,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnGenerate = document.getElementById('btn-generate');
     const btnFilter = document.getElementById('btn-filter');
-    const errorMsg = document.getElementById('error-msg');
 
+    // Generar combinaciones iniciales
     btnGenerate.addEventListener('click', () => {
-        const t = parseInt(document.getElementById('count-terra').value) || 0;
-        const f = parseInt(document.getElementById('count-fire').value) || 0;
-        const w = parseInt(document.getElementById('count-water').value) || 0;
-        const a = parseInt(document.getElementById('count-air').value) || 0;
+        const counts = {
+            tierra: parseInt(document.getElementById('count-terra').value) || 0,
+            fuego: parseInt(document.getElementById('count-fuego').value) || 0,
+            agua: parseInt(document.getElementById('count-water').value) || 0,
+            aire: parseInt(document.getElementById('count-air').value) || 0
+        };
 
-        if (t + f + w + a !== 4) {
-            errorMsg.innerText = "⚠️ La suma de elementos debe ser 4";
-            return;
+        const total = counts.tierra + counts.fuego + counts.agua + counts.aire;
+
+        if (total !== 4) {
+            // Si el usuario no está seguro, generamos TODAS las 256 permutaciones posibles
+            if(confirm("La suma no es 4. ¿Quieres cargar TODAS las combinaciones posibles del juego para mayor seguridad?")) {
+                possibilities = generateAllPossible();
+            } else { return; }
+        } else {
+            // Generar solo permutaciones de los elementos encontrados
+            let base = [];
+            for(let el in counts) for(let i=0; i<counts[el]; i++) base.push(el);
+            possibilities = generateUniquePermutations(base);
         }
 
-        let base = [];
-        for(let i=0; i<t; i++) base.push("tierra");
-        for(let i=0; i<f; i++) base.push("fuego");
-        for(let i=0; i<w; i++) base.push("agua");
-        for(let i=0; i<a; i++) base.push("aire");
-
-        possibilities = generateUniquePermutations(base);
         document.getElementById('part1').classList.add('hidden');
         document.getElementById('part2').classList.remove('hidden');
-        
         updateUI();
     });
 
+    // Filtrar basado en el feedback (Blancos y Negros)
     btnFilter.addEventListener('click', () => {
         const white = parseInt(document.getElementById('f-white').value) || 0;
         const black = parseInt(document.getElementById('f-black').value) || 0;
 
-        // Validación de imposibilidad física del Mastermind
-        if (white === 3 && black === 1) {
-            alert("Error lógico: Es imposible tener 3 blancos y 1 negro. Revisa los círculos.");
-            return;
-        }
-        if (white + black > 4) {
-            alert("Error: La suma de blancos y negros no puede ser mayor a 4.");
+        if (white === 4) {
+            showFinal(currentGuess);
             return;
         }
 
-        // Filtrar combinaciones
         const newPossibilities = possibilities.filter(p => {
             const feedback = getFeedback(currentGuess, p);
             return feedback.white === white && feedback.black === black;
         });
 
         if (newPossibilities.length === 0) {
-            alert("❌ No quedan combinaciones. Esto ocurre si:\n1. Has contado mal los elementos al principio.\n2. Has puesto mal el número de círculos Blancos/Negros.");
+            alert("⚠️ No hay combinaciones que coincidan con esos círculos. Puede que el conteo inicial fuera incorrecto. El buscador ahora intentará encontrar soluciones alternativas entre todas las opciones del juego.");
+            // Si falla, abrimos el abanico a todas las posibilidades (4^4)
+            possibilities = generateAllPossible().filter(p => {
+                const feedback = getFeedback(currentGuess, p);
+                return feedback.white === white && feedback.black === black;
+            });
         } else {
             possibilities = newPossibilities;
-            if (white === 4) {
-                showFinal(currentGuess);
-            } else {
-                updateUI();
-            }
         }
+
+        updateUI();
     });
 
     function updateUI() {
         if (possibilities.length === 1) {
             showFinal(possibilities[0]);
-            return;
+        } else {
+            currentGuess = possibilities[Math.floor(Math.random() * possibilities.length)];
+            document.getElementById('count-rem').innerText = possibilities.length;
+            renderPills(currentGuess, 'current-guess');
         }
-        currentGuess = possibilities[0]; 
-        document.getElementById('count-rem').innerText = possibilities.length;
-        renderPills(currentGuess, 'current-guess');
-        
-        // Limpiar inputs para el siguiente turno
-        document.getElementById('f-white').value = 0;
-        document.getElementById('f-black').value = 0;
     }
 
     function showFinal(solution) {
@@ -94,48 +90,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Lógica Mastermind
     function getFeedback(guess, solution) {
-        let white = 0;
-        let black = 0;
-        let g = [...guess];
-        let s = [...solution];
-
+        let white = 0, black = 0;
+        let g = [...guess], s = [...solution];
         for (let i = 0; i < 4; i++) {
-            if (g[i] === s[i]) {
-                white++;
-                g[i] = s[i] = null;
-            }
+            if (g[i] === s[i]) { white++; g[i] = s[i] = null; }
         }
         for (let i = 0; i < 4; i++) {
             if (g[i] !== null) {
                 let idx = s.indexOf(g[i]);
-                if (idx !== -1) {
-                    black++;
-                    s[idx] = null;
-                }
+                if (idx !== -1) { black++; s[idx] = null; }
             }
         }
         return { white, black };
     }
 
+    // Permutaciones únicas (cuando sabemos los elementos)
     function generateUniquePermutations(arr) {
-        let results = [];
-        const permute = (current, remaining) => {
-            if (remaining.length === 0) {
-                results.push(current);
-                return;
-            }
-            let seen = new Set();
-            for (let i = 0; i < remaining.length; i++) {
-                if (seen.has(remaining[i])) continue;
-                seen.add(remaining[i]);
-                permute(
-                    [...current, remaining[i]],
-                    [...remaining.slice(0, i), ...remaining.slice(i + 1)]
-                );
+        let res = [];
+        const p = (c, r) => {
+            if (r.length === 0) { res.push(c); return; }
+            let s = new Set();
+            for (let i = 0; i < r.length; i++) {
+                if (s.has(r[i])) continue;
+                s.add(r[i]);
+                p([...c, r[i]], [...r.slice(0, i), ...r.slice(i+1)]);
             }
         };
-        permute([], arr);
-        return results;
+        p([], arr);
+        return res;
+    }
+
+    // Todas las 256 combinaciones (por si el Paso 1 falló)
+    function generateAllPossible() {
+        const els = ["tierra", "fuego", "agua", "aire"];
+        let res = [];
+        for(let a of els) for(let b of els) for(let c of els) for(let d of els) res.push([a,b,c,d]);
+        return res;
     }
 });
