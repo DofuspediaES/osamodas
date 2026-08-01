@@ -10,62 +10,101 @@
 
 <h1>🦉 Osamodas Mastermind Solver</h1>
 
+<h2>Parte 1 - Descubrir elementos</h2>
+
 <p>
-Introduce el resultado de tu prueba:
+Primero usa 4 veces el mismo hechizo en Dofus.
+Introduce los círculos obtenidos.
 </p>
 
 
-<div id="elementos">
+<div class="grid">
 
-<button class="fuego" onclick="añadir('F')">
-🔥 Fuego
-</button>
+<div class="card fuego">
+<h3>🔥 Fuego x4</h3>
+Blancos:
+<input id="F_b" type="number" min="0" max="4">
 
-<button class="aire" onclick="añadir('A')">
-🌪 Aire
-</button>
+Negros:
+<input id="F_n" type="number" min="0" max="4">
+</div>
 
-<button class="agua" onclick="añadir('W')">
-💧 Agua
-</button>
 
-<button class="tierra" onclick="añadir('T')">
-🌍 Tierra
-</button>
+<div class="card aire">
+<h3>🌪 Aire x4</h3>
+Blancos:
+<input id="A_b" type="number" min="0" max="4">
+
+Negros:
+<input id="A_n" type="number" min="0" max="4">
+</div>
+
+
+<div class="card agua">
+<h3>💧 Agua x4</h3>
+Blancos:
+<input id="W_b" type="number" min="0" max="4">
+
+Negros:
+<input id="W_n" type="number" min="0" max="4">
+</div>
+
+
+<div class="card tierra">
+<h3>🌍 Tierra x4</h3>
+Blancos:
+<input id="T_b" type="number" min="0" max="4">
+
+Negros:
+<input id="T_n" type="number" min="0" max="4">
+</div>
 
 </div>
 
 
-<h2>Combinación probada:</h2>
-
-<div id="prueba"></div>
-
-
-<h2>Resultado:</h2>
+<button onclick="crearSolver()">
+Generar combinaciones
+</button>
 
 
-<label>
-⚪ Blancos:
-<input id="blancos" type="number" min="0" max="4">
-</label>
+<hr>
 
 
-<label>
-⚫ Negros:
-<input id="negros" type="number" min="0" max="4">
-</label>
+<h2>Parte 2 - Resolver posición</h2>
+
+
+<h3>Prueba recomendada:</h3>
+
+<div id="sugerencia">
+Esperando datos...
+</div>
+
+
+<h3>Resultado:</h3>
+
+
+Blancos:
+
+<input id="resultadoB" type="number" min="0" max="4">
+
+
+Negros:
+
+<input id="resultadoN" type="number" min="0" max="4">
 
 
 <br><br>
 
+
 <button onclick="guardarResultado()">
-Confirmar resultado
+Enviar resultado
 </button>
 
 
-<h2>Siguiente combinación:</h2>
 
-<div id="respuesta"></div>
+<h2>Estado</h2>
+
+<div id="estado"></div>
 
 
 <script src="script.js"></script>
