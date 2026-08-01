@@ -1,20 +1,22 @@
 body { background: #121212; color: #eee; font-family: sans-serif; display: flex; justify-content: center; padding: 10px; }
 .container { background: #1e1e1e; padding: 20px; border-radius: 12px; max-width: 400px; width: 100%; text-align: center; }
-.grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.card { background: #2a2a2a; padding: 10px; border-radius: 8px; border: 1px solid #444; }
+.grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+.card { background: #2a2a2a; padding: 10px; border-radius: 8px; }
 input { background: #000; border: 1px solid #ffcc00; color: #fff; padding: 8px; font-size: 1.2rem; text-align: center; width: 50px; }
 button { background: #ffcc00; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+
 #solver-grid { display: flex; justify-content: space-between; gap: 5px; margin: 20px 0; }
 .slot { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.pill { padding: 8px 0; border-radius: 4px; font-size: 0.65rem; font-weight: bold; width: 100%; color: white; text-transform: uppercase; }
+.pill { padding: 8px 0; border-radius: 4px; font-size: 0.6rem; font-weight: bold; width: 100%; color: white; text-transform: uppercase; background: #444; }
 .pill-tierra { background: #795548; } .pill-fuego { background: #d32f2f; }
 .pill-agua { background: #1976d2; } .pill-aire { background: #689f38; }
 
-/* Círculos con alto contraste real */
 .circle-btn { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #555; cursor: pointer; background: #111; }
-.circle-btn[data-state="white"] { background: #fff !important; border: 5px solid #000 !important; }
-.circle-btn[data-state="black"] { background: #000 !important; border: 5px solid #fff !important; }
+.circle-btn[data-state="white"] { background: #fff !important; border: 5px solid #000 !important; box-shadow: 0 0 8px #fff; }
+.circle-btn[data-state="black"] { background: #000 !important; border: 5px solid #fff !important; box-shadow: 0 0 8px #fff; }
 
-.pill-container { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+.debug-area { margin-top: 20px; background: #111; padding: 10px; border-radius: 8px; max-height: 100px; overflow-y: auto; font-size: 0.7rem; text-align: left; }
+.success-text { color: #00ff00; }
 .hidden { display: none; }
-.footer { margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #444; padding-top: 10px; font-size: 0.8rem; }
+.footer { margin-top: 20px; display: flex; justify-content: space-between; border-top: 1px solid #444; padding-top: 10px; }
+.btn-reset-small { width: auto; background: #444; color: white; padding: 5px 10px; font-size: 0.7rem; }
