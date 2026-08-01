@@ -145,105 +145,120 @@
         }
 
         /* SELECTOR DE ELEMENTOS */
-        .elements-row {
+        .elements-selector {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
             margin-bottom: 12px;
         }
 
-        .position-slot {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .position-label {
-            font-size: 0.75em;
-            color: #999;
-            text-align: center;
-        }
-
-        .element-selector {
-            background: #3a3a3a;
+        .element-btn {
+            padding: 10px;
             border: 2px solid #555;
             border-radius: 6px;
-            padding: 8px;
-            color: #fff;
             font-weight: bold;
             cursor: pointer;
-            text-align: center;
             font-size: 0.9em;
             transition: all 0.2s;
-            min-height: 38px;
+            color: #fff;
+        }
+
+        .element-btn.aire {
+            background: #2ecc71;
+            border-color: #27ae60;
+        }
+
+        .element-btn.aire:hover {
+            box-shadow: 0 0 10px #2ecc71;
+        }
+
+        .element-btn.tierra {
+            background: #8B6914;
+            border-color: #6b5010;
+        }
+
+        .element-btn.tierra:hover {
+            box-shadow: 0 0 10px #8B6914;
+        }
+
+        .element-btn.fuego {
+            background: #e74c3c;
+            border-color: #c0392b;
+        }
+
+        .element-btn.fuego:hover {
+            box-shadow: 0 0 10px #e74c3c;
+        }
+
+        .element-btn.agua {
+            background: #3498db;
+            border-color: #2980b9;
+        }
+
+        .element-btn.agua:hover {
+            box-shadow: 0 0 10px #3498db;
+        }
+
+        /* LISTA DE SELECCIÓN */
+        .selected-list {
+            background: #1a1a1a;
+            border: 2px solid #555;
+            border-radius: 8px;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+            min-height: 50px;
+        }
+
+        .selected-slot {
+            background: #3a3a3a;
+            border: 2px dashed #555;
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            color: #999;
+            min-height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .element-selector:hover {
+        .selected-slot:hover {
             border-color: #3498db;
-            background: #444;
         }
 
-        .element-selector.aire {
+        .selected-slot.aire {
             background: #2ecc71;
             color: #fff;
             border-color: #27ae60;
+            border-style: solid;
         }
 
-        .element-selector.tierra {
+        .selected-slot.tierra {
             background: #8B6914;
             color: #fff;
             border-color: #6b5010;
+            border-style: solid;
         }
 
-        .element-selector.fuego {
+        .selected-slot.fuego {
             background: #e74c3c;
             color: #fff;
             border-color: #c0392b;
+            border-style: solid;
         }
 
-        .element-selector.agua {
+        .selected-slot.agua {
             background: #3498db;
             color: #fff;
             border-color: #2980b9;
+            border-style: solid;
         }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background: #3a3a3a;
-            border: 2px solid #3498db;
-            border-radius: 6px;
-            z-index: 1000;
-            min-width: 120px;
-        }
-
-        .dropdown-menu.active {
-            display: block;
-        }
-
-        .dropdown-item {
-            padding: 8px 12px;
-            color: #fff;
-            cursor: pointer;
-            border-bottom: 1px solid #555;
-            transition: background 0.2s;
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover {
-            background: #444;
-        }
-
-        .dropdown-item.aire { color: #2ecc71; font-weight: bold; }
-        .dropdown-item.tierra { color: #8B6914; font-weight: bold; }
-        .dropdown-item.fuego { color: #e74c3c; font-weight: bold; }
-        .dropdown-item.agua { color: #3498db; font-weight: bold; }
 
         /* FEEDBACK CIRCLES */
         .feedback-circles {
@@ -300,6 +315,30 @@
             border-color: #555;
         }
 
+        /* ESTADÍSTICAS */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.85em;
+            color: #aaa;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-item {
+            background: #3a3a3a;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #555;
+        }
+
+        .stat-value {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
         /* BOTONES */
         .button-group {
             display: grid;
@@ -324,8 +363,14 @@
             grid-column: span 2;
         }
 
-        .btn-confirm:hover {
+        .btn-confirm:hover:not(:disabled) {
             background: #229954;
+        }
+
+        .btn-confirm:disabled {
+            background: #555;
+            cursor: not-allowed;
+            opacity: 0.5;
         }
 
         .btn-reset {
@@ -337,13 +382,13 @@
             background: #c0392b;
         }
 
-        .btn-skip {
-            background: #3498db;
-            color: white;
+        .btn-clear {
+            background: #555;
+            color: #fff;
         }
 
-        .btn-skip:hover {
-            background: #2980b9;
+        .btn-clear:hover {
+            background: #666;
         }
 
         /* HISTORIAL */
@@ -370,29 +415,6 @@
             color: #666;
             text-align: center;
             padding: 8px;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            font-size: 0.85em;
-            color: #aaa;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-
-        .stat-item {
-            background: #3a3a3a;
-            padding: 6px;
-            border-radius: 6px;
-            border: 1px solid #555;
-        }
-
-        .stat-value {
-            color: #3498db;
-            font-weight: bold;
-            font-size: 1.2em;
         }
 
         @media (max-width: 500px) {
@@ -426,32 +448,31 @@
             <div class="suggestion-text">📍 Intenta esta combinación:</div>
             <div class="suggestion-combo" id="suggestionCombo">
                 <div class="suggestion-item aire">Aire</div>
-                <div class="suggestion-item tierra">Tierra</div>
-                <div class="suggestion-item fuego">Fuego</div>
+                <div class="suggestion-item tierra">Tier</div>
+                <div class="suggestion-item fuego">Fuer</div>
                 <div class="suggestion-item agua">Agua</div>
             </div>
         </div>
 
         <!-- SELECTOR DE ELEMENTOS -->
         <div class="section">
+            <div class="section-title">Haz clic en elementos</div>
+            <div class="elements-selector" id="elementsSelector">
+                <button class="element-btn aire" onclick="addElement('Aire')">🌪️ Aire</button>
+                <button class="element-btn tierra" onclick="addElement('Tierra')">🌍 Tierra</button>
+                <button class="element-btn fuego" onclick="addElement('Fuego')">🔥 Fuego</button>
+                <button class="element-btn agua" onclick="addElement('Agua')">💧 Agua</button>
+            </div>
+        </div>
+
+        <!-- LISTA DE SELECCIÓN -->
+        <div class="section">
             <div class="section-title">Tu Combinación</div>
-            <div class="elements-row" id="elementsRow">
-                <div class="position-slot">
-                    <div class="position-label">Pos 1</div>
-                    <div class="element-selector" onclick="toggleDropdown(0)">-</div>
-                </div>
-                <div class="position-slot">
-                    <div class="position-label">Pos 2</div>
-                    <div class="element-selector" onclick="toggleDropdown(1)">-</div>
-                </div>
-                <div class="position-slot">
-                    <div class="position-label">Pos 3</div>
-                    <div class="element-selector" onclick="toggleDropdown(2)">-</div>
-                </div>
-                <div class="position-slot">
-                    <div class="position-label">Pos 4</div>
-                    <div class="element-selector" onclick="toggleDropdown(3)">-</div>
-                </div>
+            <div class="selected-list" id="selectedList">
+                <div class="selected-slot"></div>
+                <div class="selected-slot"></div>
+                <div class="selected-slot"></div>
+                <div class="selected-slot"></div>
             </div>
         </div>
 
@@ -486,11 +507,11 @@
 
         <!-- BOTONES -->
         <div class="button-group">
-            <button class="btn-skip" onclick="useSuggestion()">📋 Usar Sugerencia</button>
             <button class="btn-reset" onclick="resetSolver()">🔄 Reiniciar</button>
+            <button class="btn-clear" onclick="clearSelection()">🗑️ Limpiar</button>
         </div>
 
-        <button class="btn-confirm" onclick="submitFeedback()">✓ Confirmar Resultado</button>
+        <button class="btn-confirm" id="confirmBtn" onclick="submitFeedback()">✓ Confirmar Resultado</button>
 
         <!-- HISTORIAL -->
         <div class="section">
@@ -510,13 +531,20 @@
             'Agua': 'agua'
         };
 
+        const ELEMENT_SHORT = {
+            'Aire': 'Aire',
+            'Tierra': 'Tier',
+            'Fuego': 'Fuer',
+            'Agua': 'Agua'
+        };
+
         let solver = {
             possibleCombinations: generateAllCombinations(),
             attempts: [],
             feedbackHistory: [],
             currentSelection: [null, null, null, null],
             currentFeedback: ['empty', 'empty', 'empty', 'empty'],
-            currentSuggestion: ['Aire', 'Aire', 'Tierra', 'Tierra']
+            currentSuggestion: ['Aire', 'Tierra', 'Fuego', 'Agua']
         };
 
         function generateAllCombinations() {
@@ -533,45 +561,36 @@
             return combinations;
         }
 
-        function toggleDropdown(position) {
-            const selectors = document.querySelectorAll('.element-selector');
-            const selector = selectors[position];
-            
-            let dropdown = selector.parentElement.querySelector('.dropdown-menu');
-            if (!dropdown) {
-                dropdown = document.createElement('div');
-                dropdown.className = 'dropdown-menu';
-                dropdown.innerHTML = ELEMENTS.map(el => 
-                    `<div class="dropdown-item ${ELEMENT_CLASS[el].toLowerCase()}" onclick="selectElement(${position}, '${el}')">${el}</div>`
-                ).join('');
-                selector.parentElement.appendChild(dropdown);
+        function addElement(element) {
+            for (let i = 0; i < 4; i++) {
+                if (solver.currentSelection[i] === null) {
+                    solver.currentSelection[i] = element;
+                    updateSelectedList();
+                    return;
+                }
             }
-            
-            dropdown.classList.toggle('active');
+            showStatus('Ya tienes 4 elementos seleccionados', 'error');
         }
 
-        function selectElement(position, element) {
-            solver.currentSelection[position] = element;
-            updateSelectors();
-            closeAllDropdowns();
+        function removeElement(position) {
+            solver.currentSelection[position] = null;
+            solver.currentFeedback[position] = 'empty';
+            updateSelectedList();
+            updateCircles();
         }
 
-        function closeAllDropdowns() {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                menu.classList.remove('active');
-            });
-        }
-
-        function updateSelectors() {
-            const selectors = document.querySelectorAll('.element-selector');
-            selectors.forEach((sel, i) => {
-                const element = solver.currentSelection[i];
-                if (element) {
-                    sel.textContent = element.substring(0, 4);
-                    sel.className = `element-selector ${ELEMENT_CLASS[element].toLowerCase()}`;
+        function updateSelectedList() {
+            const slots = document.querySelectorAll('.selected-slot');
+            slots.forEach((slot, i) => {
+                if (solver.currentSelection[i]) {
+                    const element = solver.currentSelection[i];
+                    slot.textContent = ELEMENT_SHORT[element];
+                    slot.className = `selected-slot ${ELEMENT_CLASS[element].toLowerCase()}`;
+                    slot.onclick = () => removeElement(i);
                 } else {
-                    sel.textContent = '-';
-                    sel.className = 'element-selector';
+                    slot.textContent = '';
+                    slot.className = 'selected-slot';
+                    slot.onclick = null;
                 }
             });
         }
@@ -596,14 +615,6 @@
                     circle.textContent = '';
                 }
             });
-        }
-
-        function useSuggestion() {
-            solver.currentSelection = [...solver.currentSuggestion];
-            solver.currentFeedback = ['empty', 'empty', 'empty', 'empty'];
-            updateSelectors();
-            updateCircles();
-            showStatus('Usa esta combinación en el juego', 'info');
         }
 
         function calculateFeedback(guess, secret) {
@@ -642,12 +653,19 @@
             const whiteCount = solver.currentFeedback.filter(f => f === 'white').length;
             const blackCount = solver.currentFeedback.filter(f => f === 'black').length;
 
+            // Validar que no haya más de 4 coincidencias
+            if (whiteCount + blackCount > 4) {
+                showStatus('Máximo 4 circulos totales', 'error');
+                return;
+            }
+
             solver.attempts.push([...solver.currentSelection]);
             solver.feedbackHistory.push({ white: whiteCount, black: blackCount });
 
             if (whiteCount === 4) {
                 addToHistory(solver.currentSelection, whiteCount, blackCount, true);
                 showStatus(`🎉 ¡CÓDIGO ENCONTRADO!`, 'success');
+                document.getElementById('confirmBtn').disabled = true;
                 return;
             }
 
@@ -683,7 +701,9 @@
             let bestGuess = solver.possibleCombinations[0];
             let bestScore = Infinity;
 
-            for (let guess of solver.possibleCombinations.slice(0, 30)) {
+            const sampleSize = Math.min(30, solver.possibleCombinations.length);
+            for (let i = 0; i < sampleSize; i++) {
+                const guess = solver.possibleCombinations[i];
                 const scores = {};
 
                 for (let combo of solver.possibleCombinations) {
@@ -705,14 +725,21 @@
         function updateSuggestion() {
             const suggestionCombo = document.getElementById('suggestionCombo');
             suggestionCombo.innerHTML = solver.currentSuggestion.map(el => 
-                `<div class="suggestion-item ${ELEMENT_CLASS[el].toLowerCase()}">${el.substring(0, 4)}</div>`
+                `<div class="suggestion-item ${ELEMENT_CLASS[el].toLowerCase()}">${ELEMENT_SHORT[el]}</div>`
             ).join('');
         }
 
         function clearForNextAttempt() {
             solver.currentSelection = [null, null, null, null];
             solver.currentFeedback = ['empty', 'empty', 'empty', 'empty'];
-            updateSelectors();
+            updateSelectedList();
+            updateCircles();
+        }
+
+        function clearSelection() {
+            solver.currentSelection = [null, null, null, null];
+            solver.currentFeedback = ['empty', 'empty', 'empty', 'empty'];
+            updateSelectedList();
             updateCircles();
         }
 
@@ -751,28 +778,23 @@
                 feedbackHistory: [],
                 currentSelection: [null, null, null, null],
                 currentFeedback: ['empty', 'empty', 'empty', 'empty'],
-                currentSuggestion: ['Aire', 'Aire', 'Tierra', 'Tierra']
+                currentSuggestion: ['Aire', 'Tierra', 'Fuego', 'Agua']
             };
 
             document.getElementById('history').innerHTML = '<div class="history-empty">Sin intentos aún</div>';
-            updateSelectors();
+            updateSelectedList();
             updateCircles();
             updateSuggestion();
             updateStats();
+            document.getElementById('confirmBtn').disabled = false;
             showStatus('✓ Reiniciado', 'info');
         }
 
         window.addEventListener('load', () => {
-            updateSelectors();
+            updateSelectedList();
             updateCircles();
             updateStats();
-            showStatus('Usa la sugerencia o selecciona tus propios elementos', 'info');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.element-selector') && !e.target.closest('.dropdown-menu')) {
-                closeAllDropdowns();
-            }
+            showStatus('Haz clic en elementos para crear tu combinación', 'info');
         });
     </script>
 </body>
