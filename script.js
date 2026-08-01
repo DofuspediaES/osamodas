@@ -1,94 +1,98 @@
 document.addEventListener('DOMContentLoaded', () => {
     let possibilities = [];
+    let history = []; // Para poder deshacer si no hay combinaciones
     let currentGuess = [];
 
     const btnStart = document.getElementById('btn-start');
     const btnFilter = document.getElementById('btn-filter');
-    const circleBtns = document.querySelectorAll('.circle-btn');
+    const solverGrid = document.getElementById('solver-grid');
 
-    // Cambiar estado visual del círculo (Nada -> Blanco -> Negro)
-    circleBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const states = ['none', 'white', 'black'];
-            let idx = states.indexOf(btn.dataset.state);
-            btn.dataset.state = states[(idx + 1) % states.length];
-        });
-    });
-
-    // Iniciar Parte 1
+    // Inicializar Parte 1
     btnStart.addEventListener('click', () => {
-        const t = parseInt(document.getElementById('in-tierra').value) || 0;
-        const f = parseInt(document.getElementById('in-fuego').value) || 0;
-        const w = parseInt(document.getElementById('in-agua').value) || 0;
-        const a = parseInt(document.getElementById('in-aire').value) || 0;
+        const counts = {
+            tierra: parseInt(document.getElementById('in-tierra').value) || 0,
+            fuego: parseInt(document.getElementById('in-fuego').value) || 0,
+            agua: parseInt(document.getElementById('in-agua').value) || 0,
+            aire: parseInt(document.getElementById('in-aire').value) || 0
+        };
 
-        if (t + f + w + a !== 4) {
-            alert("La suma debe ser exactamente 4.");
+        if (counts.tierra + counts.fuego + counts.agua + counts.aire !== 4) {
+            alert("La suma de elementos debe ser 4.");
             return;
         }
 
         let base = [];
-        for(let i=0; i<t; i++) base.push("tierra");
-        for(let i=0; i<f; i++) base.push("fuego");
-        for(let i=0; i<w; i++) base.push("agua");
-        for(let i=0; i<a; i++) base.push("aire");
+        for (let el in counts) {
+            for (let i = 0; i < counts[el]; i++) base.push(el);
+        }
 
         possibilities = generateUniquePermutations(base);
         document.getElementById('part1').classList.add('hidden');
         document.getElementById('part2').classList.remove('hidden');
-        
         updateUI();
     });
 
-    // Filtrar Parte 2
+    // Lógica de filtrado
     btnFilter.addEventListener('click', () => {
-        let whites = 0;
-        let blacks = 0;
-        
-        circleBtns.forEach(btn => {
-            if (btn.dataset.state === 'white') whites++;
-            if (btn.dataset.state === 'black') blacks++;
+        const circleBtns = document.querySelectorAll('.circle-btn');
+        const userPattern = Array.from(circleBtns).map(b => b.dataset.state);
+
+        // Guardar estado actual por si hay que deshacer
+        history.push([...possibilities]);
+
+        // FILTRADO POSICIONAL ESTRICTO
+        const newPossibilities = possibilities.filter(candidate => {
+            const simulatedPattern = calculateDofusPattern(currentGuess, candidate);
+            return JSON.stringify(simulatedPattern) === JSON.stringify(userPattern);
         });
 
-        if (whites === 4) {
-            showFinal(currentGuess);
-            return;
-        }
-
-        // El filtro ahora es por CANTIDAD TOTAL (No por posición)
-        // Esto evita errores si Dofus ordena los círculos a su manera
-        possibilities = possibilities.filter(p => {
-            const score = getMastermindScore(currentGuess, p);
-            return score.white === whites && score.black === blacks;
-        });
-
-        if (possibilities.length === 0) {
-            alert("⚠️ No hay combinaciones posibles. Revisa si contaste bien los elementos al principio o los círculos.");
-            location.reload();
+        if (newPossibilities.length === 0) {
+            document.getElementById('msg-error').classList.remove('hidden');
         } else {
+            possibilities = newPossibilities;
+            document.getElementById('msg-error').classList.add('hidden');
             updateUI();
         }
     });
 
+    window.undoFilter = () => {
+        if (history.length > 0) {
+            possibilities = history.pop();
+            document.getElementById('msg-error').classList.add('hidden');
+            updateUI();
+        }
+    };
+
     function updateUI() {
+        document.getElementById('count-text').textContent = possibilities.length;
+        
         if (possibilities.length === 1) {
-            showFinal(possibilities[0]);
+            document.getElementById('solver-view').classList.add('hidden');
+            document.getElementById('solution-view').classList.remove('hidden');
+            renderPills(possibilities[0], 'final-pills');
             return;
         }
 
         currentGuess = possibilities[0];
-        document.getElementById('count-text').textContent = possibilities.length;
-        renderPills(currentGuess, 'display-guess');
-        
-        // Resetear círculos para el nuevo intento
-        circleBtns.forEach(btn => btn.dataset.state = 'none');
+        renderSolverGrid(currentGuess);
     }
 
-    function showFinal(sol) {
-        document.getElementById('guess-area').classList.add('hidden');
-        document.getElementById('solution-screen').classList.remove('hidden');
-        renderPills(sol, 'final-pills');
-        document.getElementById('count-text').textContent = "1";
+    function renderSolverGrid(guess) {
+        solverGrid.innerHTML = "";
+        guess.forEach((el, i) => {
+            const slot = document.createElement('div');
+            slot.className = 'slot';
+            slot.innerHTML = `
+                <div class="pill pill-${el}">${el}</div>
+                <div class="circle-btn" data-state="none" id="btn-${i}"></div>
+            `;
+            slot.querySelector('.circle-btn').addEventListener('click', function() {
+                const states = ['none', 'white', 'black'];
+                let idx = states.indexOf(this.dataset.state);
+                this.dataset.state = states[(idx + 1) % states.length];
+            });
+            solverGrid.appendChild(slot);
+        });
     }
 
     function renderPills(arr, containerId) {
@@ -97,26 +101,36 @@ document.addEventListener('DOMContentLoaded', () => {
         arr.forEach(el => {
             const div = document.createElement('div');
             div.className = `pill pill-${el}`;
+            div.style.width = "80px";
             div.textContent = el;
             container.appendChild(div);
         });
     }
 
-    // Algoritmo estándar de Mastermind (Cuenta totales)
-    function getMastermindScore(guess, solution) {
-        let white = 0, black = 0;
-        let g = [...guess], s = [...solution];
+    // ALGORITMO POSICIONAL: Compara lo que lanzaste contra una posible solución
+    function calculateDofusPattern(guess, solution) {
+        let pattern = ['none', 'none', 'none', 'none'];
+        let g = [...guess];
+        let s = [...solution];
 
+        // 1. Primero marcamos Blancos (Acierto en posición)
         for (let i = 0; i < 4; i++) {
-            if (g[i] === s[i]) { white++; g[i] = s[i] = null; }
-        }
-        for (let i = 0; i < 4; i++) {
-            if (g[i] !== null) {
-                let idx = s.indexOf(g[i]);
-                if (idx !== -1) { black++; s[idx] = null; }
+            if (g[i] === s[i]) {
+                pattern[i] = 'white';
+                g[i] = s[i] = null;
             }
         }
-        return { white, black };
+        // 2. Luego marcamos Negros (Elemento existe pero en otra posición)
+        for (let i = 0; i < 4; i++) {
+            if (g[i] !== null) {
+                let foundIdx = s.indexOf(g[i]);
+                if (foundIdx !== -1) {
+                    pattern[i] = 'black';
+                    s[foundIdx] = null;
+                }
+            }
+        }
+        return pattern;
     }
 
     function generateUniquePermutations(arr) {
@@ -127,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < r.length; i++) {
                 if (seen.has(r[i])) continue;
                 seen.add(r[i]);
-                p([...c, r[i]], [...r.slice(0, i), ...r.slice(i+1)]);
+                p([...c, r[i]], [...r.slice(0, i), ...r.slice(i + 1)]);
             }
         };
         p([], arr);
