@@ -6,121 +6,111 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnFilter = document.getElementById('btn-filter');
     const circleBtns = document.querySelectorAll('.circle-btn');
 
-    // Cambiar estado visual: Nada -> Blanco -> Negro
+    // Manejo de clicks en círculos: Ninguno -> Blanco -> Negro
     circleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const states = ['none', 'white', 'black'];
-            let currentIdx = states.indexOf(btn.dataset.state);
-            btn.dataset.state = states[(currentIdx + 1) % states.length];
+            let current = states.indexOf(btn.dataset.state);
+            btn.dataset.state = states[(current + 1) % states.length];
         });
     });
 
     btnStart.addEventListener('click', () => {
-        const t = parseInt(document.getElementById('in-tierra').value) || 0;
-        const f = parseInt(document.getElementById('in-fuego').value) || 0;
-        const w = parseInt(document.getElementById('in-agua').value) || 0;
-        const a = parseInt(document.getElementById('in-aire').value) || 0;
+        const counts = {
+            tierra: parseInt(document.getElementById('in-tierra').value) || 0,
+            fuego: parseInt(document.getElementById('in-fuego').value) || 0,
+            agua: parseInt(document.getElementById('in-agua').value) || 0,
+            aire: parseInt(document.getElementById('in-aire').value) || 0
+        };
 
-        if (t + f + w + a !== 4) {
-            alert("La suma debe ser 4 elementos.");
-            return;
+        if (counts.tierra + counts.fuego + counts.agua + counts.aire !== 4) {
+            alert("La suma debe ser 4"); return;
         }
 
         let base = [];
-        for(let i=0; i<t; i++) base.push("tierra");
-        for(let i=0; i<f; i++) base.push("fuego");
-        for(let i=0; i<w; i++) base.push("agua");
-        for(let i=0; i<a; i++) base.push("aire");
-
+        for(let el in counts) for(let i=0; i<counts[el]; i++) base.push(el);
+        
         possibilities = generateUniquePermutations(base);
         document.getElementById('part1').classList.add('hidden');
         document.getElementById('part2').classList.remove('hidden');
-        
-        updateGuessUI();
+        updateUI();
     });
 
     btnFilter.addEventListener('click', () => {
-        const userFeedback = Array.from(circleBtns).map(btn => btn.dataset.state);
-
-        // FILTRADO POSICIONAL ESTRICTO
-        // Comparamos el feedback del usuario con el feedback que daría CADA combinación posible
+        const userPattern = Array.from(circleBtns).map(b => b.dataset.state);
+        
+        // El "truco": Filtramos las combinaciones que producirían EXACTAMENTE ese patrón de colores
         possibilities = possibilities.filter(candidate => {
-            const simulatedFeedback = getDofusFeedback(currentGuess, candidate);
-            // Comprobamos si el feedback simulado es igual al que el usuario marcó
-            return JSON.stringify(simulatedFeedback) === JSON.stringify(userFeedback);
+            const simulatedPattern = getDofusPattern(currentGuess, candidate);
+            return JSON.stringify(simulatedPattern) === JSON.stringify(userPattern);
         });
 
         if (possibilities.length === 0) {
-            alert("⚠️ No hay combinaciones. Posibles causas:\n1. El juego NO muestra los círculos en orden (raro).\n2. Te equivocaste al contar elementos al principio.\n3. Marcaste mal un círculo.");
+            alert("⚠️ No hay combinaciones que coincidan. Revisa si contaste bien al principio.");
             location.reload();
         } else {
-            updateGuessUI();
+            updateUI();
         }
     });
 
-    function updateGuessUI() {
-        if (possibilities.length === 1) {
-            alert("¡Solución única encontrada!");
-        }
-
-        currentGuess = possibilities[0];
+    function updateUI() {
         document.getElementById('count-text').textContent = possibilities.length;
+        
+        if (possibilities.length === 1) {
+            currentGuess = possibilities[0];
+            document.getElementById('success-msg').classList.remove('hidden');
+            document.getElementById('btn-filter').classList.add('hidden');
+        } else {
+            currentGuess = possibilities[0];
+        }
 
         for (let i = 0; i < 4; i++) {
             const slot = document.getElementById(`slot-${i}`);
             const pill = slot.querySelector('.pill');
             const btn = slot.querySelector('.circle-btn');
-            
             pill.textContent = currentGuess[i];
             pill.className = `pill pill-${currentGuess[i]}`;
-            btn.dataset.state = 'none'; // Resetear para la nueva prueba
+            btn.dataset.state = 'none'; // Reset para nueva prueba
         }
     }
 
     /**
-     * Simula el feedback de Dofus (Posicional)
-     * Blanco: Elemento correcto en posición correcta.
-     * Negro: Elemento correcto en posición incorrectA.
-     * None: Elemento no está en la solución (o ya se agotaron sus copias).
+     * Lógica POSICIONAL de Dofus:
+     * Compara un Intento (guess) contra una Posible Solución (candidate).
+     * Retorna un array de 4 hilos: ['white', 'black', 'none', 'white']
      */
-    function getDofusFeedback(guess, solution) {
-        let result = ['none', 'none', 'none', 'none'];
+    function getDofusPattern(guess, solution) {
+        let pattern = ['none', 'none', 'none', 'none'];
         let g = [...guess];
         let s = [...solution];
 
-        // 1. Encontrar Blancos (Prioridad: Posición exacta)
+        // 1. Marcar Blancos (Mismo elemento, misma posición)
         for (let i = 0; i < 4; i++) {
             if (g[i] === s[i]) {
-                result[i] = 'white';
-                g[i] = s[i] = null;
+                pattern[i] = 'white';
+                g[i] = s[i] = null; // Marcamos como usados
             }
         }
 
-        // 2. Encontrar Negros (Resto: Existe en otra posición)
+        // 2. Marcar Negros (El elemento está en la solución pero en otro hueco)
         for (let i = 0; i < 4; i++) {
             if (g[i] !== null) {
-                let idx = s.indexOf(g[i]);
-                if (idx !== -1) {
-                    result[i] = 'black';
-                    s[idx] = null;
+                let foundIdx = s.indexOf(g[i]);
+                if (foundIdx !== -1) {
+                    pattern[i] = 'black';
+                    s[foundIdx] = null; // Marcamos como usado
                 }
             }
         }
-        return result;
+        return pattern;
     }
 
     function generateUniquePermutations(arr) {
-        let results = [];
-        const permute = (current, remaining) => {
-            if (remaining.length === 0) { results.push(current); return; }
+        let res = [];
+        const p = (c, r) => {
+            if (r.length === 0) { res.push(c); return; }
             let seen = new Set();
-            for (let i = 0; i < remaining.length; i++) {
-                if (seen.has(remaining[i])) continue;
-                seen.add(remaining[i]);
-                permute([...current, remaining[i]], [...remaining.slice(0, i), ...remaining.slice(i + 1)]);
-            }
-        };
-        permute([], arr);
-        return results;
-    }
-});
+            for (let i = 0; i < r.length; i++) {
+                if (seen.has(r[i])) continue;
+                seen.add(r[i]);
+                p([...c, r[i]], [...r.slice(0, i), ...r.slice(i+
