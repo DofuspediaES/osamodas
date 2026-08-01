@@ -1,47 +1,90 @@
 body{
-font-family:Arial;
+
 background:#171717;
 color:white;
+font-family:Arial;
 text-align:center;
+
+}
+
+
+.grid{
+
+display:flex;
+justify-content:center;
+gap:15px;
+flex-wrap:wrap;
+
+}
+
+
+.card{
+
+width:170px;
+padding:15px;
+border-radius:20px;
+color:white;
+
+}
+
+
+input{
+
+width:50px;
+margin:5px;
+
 }
 
 
 button{
 
-width:120px;
-height:60px;
+padding:12px 25px;
 border-radius:15px;
-border:0;
-margin:5px;
-font-size:18px;
+border:none;
+cursor:pointer;
+font-size:16px;
 
 }
 
 
 .fuego{
-background:#d94b32;
+
+background:#c0392b;
+
 }
 
 
 .aire{
-background:#8de3ff;
+
+background:#27ae60;
+
 }
 
 
 .agua{
-background:#3d8cff;
+
+background:#2980b9;
+
 }
 
 
 .tierra{
-background:#a56b32;
+
+background:#8e5a2b;
+
 }
 
 
-#prueba,
-#respuesta{
+#sugerencia{
 
+font-size:35px;
 margin:20px;
-font-size:25px;
+
+}
+
+
+#estado{
+
+font-size:20px;
 
 }
