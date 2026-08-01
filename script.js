@@ -104,11 +104,14 @@ for(let e of elementos){
 
 let id=e+"_n";
 
-let cantidad=
-Number(document.getElementById(id).value);
+let blancos =
+Number(document.getElementById(e+"_b").value);
+
+let negros =
+Number(document.getElementById(e+"_n").value);
 
 
-cantidades[e]=cantidad;
+cantidades[e]=blancos+negros;
 
 }
 
@@ -118,8 +121,30 @@ soluciones=generarCombinaciones();
 
 
 
-soluciones=
+soluciones =
 soluciones.filter(c=>{
+
+let cuenta={
+F:0,
+A:0,
+W:0,
+T:0
+};
+
+
+c.forEach(x=>{
+cuenta[x]++;
+});
+
+
+return 
+cuenta.F==cantidades.F &&
+cuenta.A==cantidades.A &&
+cuenta.W==cantidades.W &&
+cuenta.T==cantidades.T;
+
+
+});
 
 let cuenta={F:0,A:0,W:0,T:0};
 
